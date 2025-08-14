@@ -29,8 +29,6 @@ export default function RegisterPage() {
         }
     })
 
-    
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col items-center w-96 border border-input bg-background shadow-sm py-8 px-8 rounded-lg">

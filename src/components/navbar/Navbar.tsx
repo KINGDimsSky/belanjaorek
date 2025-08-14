@@ -13,8 +13,15 @@ import {
 import Link from "next/link";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import { Heart, Menu, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
+import MobileNav from "./MobileNav";
+import Image from "next/image";
 
 export default function Navbar() {
+  const [clicked, SetClicked] = useState<boolean>(false);
+
+
+
   return (
     <div className="w-full justify-between items-center">
       <MaxWidthWrapper className="flex justify-between items-center py-4">
@@ -46,10 +53,10 @@ export default function Navbar() {
          </NavigationMenu>
         </div>
         <div className="hidden lg:flex items-center gap-4">
-          <div className="flex gap-2 items-center cursor-pointer">
+          <div onClick={() => SetClicked(!clicked)} className="flex gap-2 items-center cursor-pointer">
             <h2>KINGDimsSky</h2>
-             <div className="rounded-full py-2 px-4 bg-green-600">
-               <h2>b</h2>
+             <div className="relative w-9 h-9 rounded-full bg-green-600 overflow-hidden object-cover">
+               <Image src={'/dimas.jpg'} alt="User Profile" width={200} height={200}/>
              </div>
           </div>
           <div className="flex gap-4">
@@ -58,11 +65,16 @@ export default function Navbar() {
           </div>        
         </div>
         <div className="flex gap-4 lg:hidden">
-          <ShoppingCart/>
-          <Heart/>
-          <Menu className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <ShoppingCart className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <Heart className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <Menu onClick={() => SetClicked(!clicked)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
         </div>
       </MaxWidthWrapper>
+      {clicked ? (
+        <MobileNav state={clicked} setState={SetClicked}/>
+      ) : (
+        null
+      )}
     </div>
   );
 }
