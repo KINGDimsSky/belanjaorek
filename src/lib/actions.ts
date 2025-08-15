@@ -25,3 +25,7 @@ export async function CreateAPost (formData : FormData) {
 export async function deletedPost (cuid : string) {
     await prisma.posts.delete({ where : { id : cuid }})
 }
+
+export async function RegisterUser () {
+    
+}
