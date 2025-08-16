@@ -18,8 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RegisterUser } from "@/lib/actions";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const [message, Setmessage] = useState<string | undefined>('');
+  const router = useRouter();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -30,13 +35,22 @@ export default function RegisterPage() {
     },
   });
 
-  const onsubmit = (Formdata : FormData) => {
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    RegisterUser(values)
+    .then((data) => {
+      if (!data.status){
+        return Setmessage(data.message)
+      }
 
+      form.reset();
+      router.push('/login')
+    })
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col items-center w-96 border border-input bg-background shadow-sm py-8 px-8 rounded-lg">
+        {message && <p className="text-red-500">{message}</p>}
         <h2 className="font-semibold text-2xl mb-1">Welcome Stranger!</h2>
         <p className="mb-10 tracking-wide font-extralight text-xs">
           Welcome Stranger!, Please enter your details.
@@ -54,7 +68,7 @@ export default function RegisterPage() {
         <p className="text-center text-sm mt-6 mb-1">Or</p>
         <div className="w-full">
           <Form {...form}>
-            <form action={''} className="space-y-4 mb-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-8">
               <FormField
                 control={form.control}
                 name="email"
@@ -62,8 +76,9 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Tyler@example.com"/>
+                      <Input {...field} placeholder="Tyler@example.com"/>
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )}/>
               <FormField
@@ -73,8 +88,9 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="Tyler Durden"/>
+                      <Input {...field} placeholder="Tyler Durden"/>
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )}
               />
@@ -85,8 +101,9 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="****" />
+                      <Input {...field} type="password" placeholder="****" />
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )}
               />
@@ -97,20 +114,21 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="****" />
+                      <Input {...field} type="password" placeholder="****" />
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )}
               />
+              <Button
+                type="submit"
+                variant={"default"}
+                size={"sm"}
+                className="w-full text-white">
+                Register
+              </Button>
             </form>
           </Form>
-          <Button
-            type="submit"
-            variant={"default"}
-            size={"sm"}
-            className="w-full text-white">
-            Register
-          </Button>
         </div>
         <p className="flex gap-2 items-center text-xs font-extralight mt-6">
           Already Have an Account?

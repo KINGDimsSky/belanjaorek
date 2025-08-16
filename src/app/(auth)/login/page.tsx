@@ -21,7 +21,7 @@ export default function LoginPage () {
     })
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col items-center w-96 border border-input bg-background shadow-sm py-8 px-8 rounded-lg">
         <h2 className="font-semibold text-2xl mb-1">Welcome People!</h2>
         <p className="mb-10 tracking-wide font-extralight text-xs">
