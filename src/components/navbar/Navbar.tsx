@@ -16,11 +16,13 @@ import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import MobileNav from "./MobileNav";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const [clicked, SetClicked] = useState<boolean>(false);
+  const {data: session, status} = useSession();
 
-
+  console.log (session)
 
   return (
     <div className="w-full justify-between items-center">

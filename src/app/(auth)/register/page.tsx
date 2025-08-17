@@ -50,7 +50,7 @@ export default function RegisterPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col items-center w-96 border border-input bg-background shadow-sm py-8 px-8 rounded-lg">
-        {message && <p className="text-red-500">{message}</p>}
+        {message && <p className="text-sm mb-2 text-red-500">{message}</p>}
         <h2 className="font-semibold text-2xl mb-1">Welcome Stranger!</h2>
         <p className="mb-10 tracking-wide font-extralight text-xs">
           Welcome Stranger!, Please enter your details.
@@ -76,7 +76,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Tyler@example.com"/>
+                      <Input type="email" {...field} placeholder="Tyler@example.com"/>
                     </FormControl>
                     <FormMessage/>
                   </FormItem>
@@ -88,7 +88,7 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Tyler Durden"/>
+                      <Input type="text" {...field} placeholder="Tyler Durden"/>
                     </FormControl>
                     <FormMessage/>
                   </FormItem>

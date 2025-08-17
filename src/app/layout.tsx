@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { SessionProvider } from 'next-auth/react'
+import { Providers } from "@/components/Providers";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -21,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className}`}>
-        <ThemeProvider attribute={"class"} defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <Providers>
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

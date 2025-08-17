@@ -1,17 +1,22 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ValidatingUser } from "@/lib/actions";
 import { LoginSchema } from "@/lib/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import z from "zod";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage () {
+    const [Message, SetMessage] = useState<string | undefined>('');
+    const router = useRouter();
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver : zodResolver(LoginSchema),
         defaultValues : {
@@ -20,9 +25,22 @@ export default function LoginPage () {
         }
     })
 
+    const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+      const IsValid = await ValidatingUser(values);
+      SetMessage('')
+      
+      if (!IsValid.status) {
+        return SetMessage(IsValid.message)
+      }
+
+      form.reset();
+      router.push('/')
+    }
+
     return (
       <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col items-center w-96 border border-input bg-background shadow-sm py-8 px-8 rounded-lg">
+        {Message && <p className="text-sm mb-2 text-red-500">{Message}</p>}
         <h2 className="font-semibold text-2xl mb-1">Welcome People!</h2>
         <p className="mb-10 tracking-wide font-extralight text-xs">
           Welcome back!, Please enter your details.
@@ -40,7 +58,7 @@ export default function LoginPage () {
         <p className="text-center text-sm mt-6 mb-1">Or</p>
         <div className="w-full">
           <Form {...form}>
-            <form action={''} className="space-y-4 mb-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-8">
               <FormField
                 control={form.control}
                 name="emailOrUsername"
@@ -48,8 +66,9 @@ export default function LoginPage () {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Tyler@example.com"/>
+                      <Input {...field} type="email" placeholder="Tyler@example.com"/>
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )}/>
               <FormField
@@ -59,20 +78,20 @@ export default function LoginPage () {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="****"/>
+                      <Input type="password" {...field} placeholder="****"/>
                     </FormControl>
+                    <FormMessage/>
                   </FormItem>
-                )}
-              />
+                )}/>
+              <Button
+                type="submit"
+                variant={"default"}
+                size={"sm"}
+                className="w-full text-white">
+                Login
+              </Button>
             </form>
           </Form>
-          <Button
-            type="submit"
-            variant={"default"}
-            size={"sm"}
-            className="w-full text-white">
-            Login
-          </Button>
         </div>
         <p className="flex gap-2 items-center text-xs font-extralight mt-6">
           Don't Have an Account?

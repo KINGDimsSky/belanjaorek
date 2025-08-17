@@ -5,11 +5,14 @@ export const RegisterSchema = z.object({
     username: z.string('Invalid Character').min(6, 'Must be At least 6 Character').max(20, 'Too Long character'),
     password: z.string('Invalid Character').min(6, 'At Least 6 Character').max(20),
     confirmPassword: z.string('Invalid Character').min(6, 'At Least 6 Character').max(20)
-})
+}).refine((data) => data.password === data.confirmPassword, {
+    path : ['confirmPassword'],
+    message : "Password do not Match!"
+}) 
 
 export const LoginSchema = z.object({
-    emailOrUsername: z.string().min(1).max(30),
-    password: z.string().min(1).max(20)
+    emailOrUsername: z.string('Must Be String').min(1, 'Do not Empty!').max(30, 'Too Long Character'),
+    password: z.string('Must Be String').min(1, 'Too Short').max(20, 'Too Long Character')
 })
 
 
