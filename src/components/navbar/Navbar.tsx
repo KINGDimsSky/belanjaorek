@@ -16,13 +16,14 @@ import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import MobileNav from "./MobileNav";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { Skeleton } from "../ui/skeleton";
+import { Button } from "../ui/button";
 
 export default function Navbar() {
   const [clicked, SetClicked] = useState<boolean>(false);
   const {data: session, status} = useSession();
 
-  console.log (session)
 
   return (
     <div className="w-full justify-between items-center">
@@ -55,12 +56,23 @@ export default function Navbar() {
          </NavigationMenu>
         </div>
         <div className="hidden lg:flex items-center gap-4">
+          {status === 'loading' ? (
+            <div className="flex gap-2 items-center">
+              <Skeleton className="w-24 h-4"/>
+              <Skeleton className="w-9 h-9 rounded-full"/>
+            </div>
+          ) : (status === 'unauthenticated' ? (
+            <div className="">
+              <Button onClick={() => signIn()} size={'sm'} className="text-foreground">Sign In</Button>
+            </div>
+          ) : (
           <div onClick={() => SetClicked(!clicked)} className="flex gap-2 items-center cursor-pointer">
             <h2>KINGDimsSky</h2>
              <div className="relative w-9 h-9 rounded-full bg-green-600 overflow-hidden object-cover">
                <Image src={'/dimas.jpg'} alt="User Profile" width={200} height={200}/>
              </div>
           </div>
+          ))}
           <div className="flex gap-4">
             <ShoppingCart className="hover:text-primary cursor-pointer"/>
             <Heart className="hover:text-primary cursor-pointer"/>

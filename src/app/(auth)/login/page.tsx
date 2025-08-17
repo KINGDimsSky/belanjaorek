@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ValidatingUser } from "@/lib/actions";
+import { ValidatingUser } from "@/lib/services";
 import { LoginSchema } from "@/lib/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function LoginPage () {
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver : zodResolver(LoginSchema),
         defaultValues : {
-            emailOrUsername : "",
+            email : "",
             password: "",
         }
     })
@@ -61,7 +61,7 @@ export default function LoginPage () {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-8">
               <FormField
                 control={form.control}
-                name="emailOrUsername"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>

@@ -11,7 +11,7 @@ export const RegisterSchema = z.object({
 }) 
 
 export const LoginSchema = z.object({
-    emailOrUsername: z.string('Must Be String').min(1, 'Do not Empty!').max(30, 'Too Long Character'),
+    email: z.string('Must Be String').min(1, 'Do not Empty!').max(30, 'Too Long Character'),
     password: z.string('Must Be String').min(1, 'Too Short').max(20, 'Too Long Character')
 })
 
