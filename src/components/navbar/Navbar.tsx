@@ -24,7 +24,6 @@ export default function Navbar() {
   const [clicked, SetClicked] = useState<boolean>(false);
   const {data: session, status} = useSession();
 
-
   return (
     <div className="w-full justify-between items-center">
       <MaxWidthWrapper className="flex justify-between items-center py-4">
@@ -67,7 +66,7 @@ export default function Navbar() {
             </div>
           ) : (
           <div onClick={() => SetClicked(!clicked)} className="flex gap-2 items-center cursor-pointer">
-            <h2>KINGDimsSky</h2>
+            <h2>{session?.user?.name}</h2>
              <div className="relative w-9 h-9 rounded-full bg-green-600 overflow-hidden object-cover">
                <Image src={'/dimas.jpg'} alt="User Profile" width={200} height={200}/>
              </div>

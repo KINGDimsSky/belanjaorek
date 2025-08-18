@@ -17,9 +17,15 @@ export const authOptions: NextAuthOptions = {
             password : string
         }
         
+        if (email === 'dimssky@gmail.com') {
+          return {
+            id: '1',
+            name: 'KINGDimsSKy',
+            email : email,
+            role : 'user'
+          }
+        }
         
-    
-    
         return null;
       },
     }),
@@ -38,6 +44,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
         token.role = user.role;
       }
 
@@ -54,6 +62,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.role = token.role;
+      session.user.name = token.name;
+      session.user.email = token.email;
 
       return session;
     },

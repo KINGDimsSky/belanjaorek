@@ -9,10 +9,12 @@ import { PiSignOutBold } from "react-icons/pi";
 import { CiCloudMoon } from "react-icons/ci";
 import { useTheme } from "next-themes";
 import { UserNav, pagesNav } from "@/lib/const/sidebar";
+import { signOut, useSession } from "next-auth/react";
 
 export default function MobileNav ({state, setState} : {state ?: boolean, setState : React.Dispatch<React.SetStateAction<boolean>>}) {
     const ref = useRef<HTMLDivElement>(null);
     const {theme, setTheme} = useTheme();
+    const {data: session, status} = useSession();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -38,7 +40,7 @@ export default function MobileNav ({state, setState} : {state ?: boolean, setSta
                     <Image src={'/dimas.jpg'} width={400} height={400} alt="User Profile" className=""/>
                   </div>
                   <div className="flex flex-col ">
-                    <h2 className="text-sm font-medium text-background">KINGDimsSky</h2>
+                    <h2 className="text-sm font-medium text-background">{session?.user?.name}</h2>
                     <h2 className="text-sm text-background/75">Dimas Zulkarnain</h2>
                   </div>
                   <div className="flex gap-2 ml-auto">
@@ -60,7 +62,7 @@ export default function MobileNav ({state, setState} : {state ?: boolean, setSta
                   ))}
                 </div>
                 <div className="border-t border-gray-300/40 mt-3 mb-3"></div>
-                <BtnWithLogo key={2} text="Sign out" icon={PiSignOutBold}/>
+                <BtnWithLogo onClick={() => signOut()} key={2} text="Sign out" icon={PiSignOutBold}/>
             </div>
         </div>
     )

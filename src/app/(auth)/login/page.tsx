@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ValidatingUser } from "@/lib/services";
+import { ValidatingUser } from "@/lib/actions";
 import { LoginSchema } from "@/lib/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import z from "zod";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage () {
     const [Message, SetMessage] = useState<string | undefined>('');
@@ -31,10 +32,15 @@ export default function LoginPage () {
       
       if (!IsValid.status) {
         return SetMessage(IsValid.message)
+      }else {
+        await signIn('credentials', {
+          ...values,
+          callbackUrl : '/',
+          redirect: false
+        })
       }
 
       form.reset();
-      router.push('/')
     }
 
     return (
