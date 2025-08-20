@@ -10,11 +10,13 @@ import { CiCloudMoon } from "react-icons/ci";
 import { useTheme } from "next-themes";
 import { UserNav, pagesNav } from "@/lib/const/sidebar";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function MobileNav ({state, setState} : {state ?: boolean, setState : React.Dispatch<React.SetStateAction<boolean>>}) {
     const ref = useRef<HTMLDivElement>(null);
     const {theme, setTheme} = useTheme();
     const {data: session, status} = useSession();
+    const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -52,7 +54,7 @@ export default function MobileNav ({state, setState} : {state ?: boolean, setSta
                 <div className="border-t border-gray-300/40 mt-3"></div>
                 <div className="flex flex-col mt-4 gap-2">
                   {UserNav.map((data) => (
-                    <BtnWithLogo id={data.id} key={data.id} text={data.name} icon={data.icon} />
+                    <BtnWithLogo onClick={() => router.push(data.href)} id={data.id} key={data.id} text={data.name} icon={data.icon} />
                   ))}
                 </div>
                 <div className="border-t border-gray-300/40 mt-3 mb-3"></div>

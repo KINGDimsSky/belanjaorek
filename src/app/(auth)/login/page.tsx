@@ -41,6 +41,7 @@ export default function LoginPage () {
       }
 
       form.reset();
+      router.push('/')
     }
 
     return (
