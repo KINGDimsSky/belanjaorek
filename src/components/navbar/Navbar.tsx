@@ -19,9 +19,11 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
+import CartDrawer from "./CartDrawer";
 
 export default function Navbar() {
   const [clicked, SetClicked] = useState<boolean>(false);
+  const [drawer, SetDrawer] = useState<boolean>(false);
   const {data: session, status} = useSession();
 
   return (
@@ -38,12 +40,7 @@ export default function Navbar() {
                <Link href={"/blog"} className="font-light tracking-tight hover:text-primary">Blog</Link>
              </NavigationMenuItem>
              <NavigationMenuItem>
-               <NavigationMenuTrigger className="tracking-tight font-light px-1">Category</NavigationMenuTrigger>
-               <NavigationMenuContent className="flex p-4 w-64 bg-gray-300">
-                 <div className="w-24 p-4">
-                    <h2>Category ne rek</h2>
-                 </div>
-               </NavigationMenuContent>
+              <Link href={'/samp'} className="font-light tracking-tight hover:text-primary">SAMP</Link>
              </NavigationMenuItem>
              <NavigationMenuItem asChild>
                 <Link href={'/about'} className="font-light tracking-tight hover:text-primary">About</Link>
@@ -73,18 +70,23 @@ export default function Navbar() {
           </div>
           ))}
           <div className="flex gap-4">
-            <ShoppingCart className="hover:text-primary cursor-pointer"/>
+            <ShoppingCart onClick={() => SetDrawer(!drawer)} className="hover:text-primary cursor-pointer"/>
             <Heart className="hover:text-primary cursor-pointer"/>
           </div>        
         </div>
         <div className="flex gap-4 lg:hidden">
-          <ShoppingCart className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <ShoppingCart onClick={() => SetDrawer(!drawer)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
           <Heart className="cursor-pointer hover:text-primary duration-150 transition-all"/>
           <Menu onClick={() => SetClicked(!clicked)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
         </div>
       </MaxWidthWrapper>
       {clicked ? (
         <MobileNav state={clicked} setState={SetClicked}/>
+      ) : (
+        null
+      )}
+      {drawer ? (
+        <CartDrawer state={drawer} setState={SetDrawer}/>
       ) : (
         null
       )}
