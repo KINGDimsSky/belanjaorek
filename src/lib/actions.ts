@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "./db";
 import { RemoveSpaceAndReplaceWithHypen } from "./utils";
 import * as z from "zod";
-import { LoginSchema, RegisterSchema } from "./schema/auth-schema";
+import { RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
 import { GetUserByEmail } from "./services";
 
@@ -53,3 +53,5 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
     status: true,
   };
 }
+
+

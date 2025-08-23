@@ -1,3 +1,4 @@
+import { AudioWaveform, BookOpen, Bot, Command, Frame, GalleryVerticalEnd, PieChart, Settings2, SquareTerminal } from "lucide-react";
 import { CgProfile } from "react-icons/cg";
 import { FaBloggerB, FaQuestion, FaStore } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
