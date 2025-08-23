@@ -16,6 +16,8 @@ const intialPost: Prisma.PostsCreateInput[] = [
           email: "dimssky@gmail.com",
           username: "dimssky",
           password: "abogoboga",
+          role : 'admin',
+          image : '/dimas.jpg'
         },
       },
     },

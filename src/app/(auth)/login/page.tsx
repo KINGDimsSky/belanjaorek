@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ValidatingUser } from "@/lib/actions";
 import { LoginSchema } from "@/lib/schema/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -17,6 +16,7 @@ import { signIn } from "next-auth/react";
 
 export default function LoginPage () {
     const [Message, SetMessage] = useState<string | undefined>('');
+    const [Loading, SetLoading] = useState<boolean>(false);
     const router = useRouter();
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver : zodResolver(LoginSchema),
@@ -27,21 +27,22 @@ export default function LoginPage () {
     })
 
     const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-      const IsValid = await ValidatingUser(values);
-      SetMessage('')
-      
-      if (!IsValid.status) {
-        return SetMessage(IsValid.message)
-      }else {
-        await signIn('credentials', {
-          ...values,
-          callbackUrl : '/',
-          redirect: false
-        })
-      }
+      SetLoading(true)
+      SetMessage('');
 
-      form.reset();
-      router.push('/')
+      const result = await signIn('credentials', {
+        ...values,
+        redirect : false
+      })
+
+      if (result?.error) {
+        SetMessage("Email Or Password Invalid!");
+        SetLoading(false)
+      }else if (result?.ok){
+        form.reset();
+         SetLoading(true);
+        router.push('/');
+      }
     }
 
     return (
@@ -92,10 +93,11 @@ export default function LoginPage () {
                 )}/>
               <Button
                 type="submit"
+                disabled={Loading}
                 variant={"default"}
                 size={"sm"}
-                className="w-full text-white">
-                Login
+                className={`w-full text-white ${Loading ? "bg-foreground disabled: cursor-progress text-background" : ""}`}>
+                {Loading ? "Loading..." : "Login"}
               </Button>
             </form>
           </Form>

@@ -27,11 +27,11 @@ export default function MobileNav ({state, setState} : {state : boolean, setStat
             <div ref={ref} className="relative bg-background w-80 py-4 px-4 rounded-lg border border-foreground/25">
                 <div className="flex items-center gap-2">
                   <div className="relative w-12 h-12 rounded-full object-cover overflow-hidden">
-                    <Image src={'/dimas.jpg'} width={400} height={400} alt="User Profile" className=""/>
+                    <Image src={session?.user?.image || ''} width={400} height={400} alt="User Profile" className=""/>
                   </div>
                   <div className="flex flex-col ">
-                    <h2 className="text-sm font-medium">{session?.user?.name}</h2>
-                    <h2 className="text-sm">Dimas Zulkarnain</h2>
+                    <h2 className="text-sm font-medium">{session?.user?.email}</h2>
+                    <h2 className="text-sm">{session?.user?.name}</h2>
                   </div>
                   <div className="flex gap-2 ml-auto">
                     <CiCloudMoon onClick={() => setTheme(theme === 'dark' ? "light" : 'dark' )} className="w-5 h-5 cursor-pointer"/>

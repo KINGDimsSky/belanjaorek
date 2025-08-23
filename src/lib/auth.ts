@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { UserLoginValidate } from "./services";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
@@ -16,17 +17,19 @@ export const authOptions: NextAuthOptions = {
             email : string,
             password : string
         }
-        
-        if (email === 'dimssky@gmail.com') {
+
+        const User = await UserLoginValidate(email, password);
+        if (User) {
           return {
-            id: '1',
-            name: 'KINGDimsSKy',
-            email : email,
-            role : 'user'
+            id : User.id,
+            email : User.email,
+            name : User.username,
+            role : User.role,
+            image : User.image
           }
         }
         
-        return null;
+        return User;
       },
     }),
     GoogleProvider({
@@ -47,6 +50,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name;
         token.email = user.email;
         token.role = user.role;
+        token.picture = user.image
       }
 
       if (account?.provider === "google") {
@@ -64,6 +68,7 @@ export const authOptions: NextAuthOptions = {
       session.user.role = token.role;
       session.user.name = token.name;
       session.user.email = token.email;
+      session.user.image = token.picture;
 
       return session;
     },

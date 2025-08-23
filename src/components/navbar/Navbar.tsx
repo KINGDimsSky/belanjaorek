@@ -65,7 +65,7 @@ export default function Navbar() {
           <div onClick={() => SetClicked(!clicked)} className="flex gap-2 items-center cursor-pointer">
             <h2>{session?.user?.name}</h2>
              <div className="relative w-9 h-9 rounded-full bg-green-600 overflow-hidden object-cover">
-               <Image src={'/dimas.jpg'} alt="User Profile" width={200} height={200}/>
+               <Image src={session?.user.image || ''} alt="User Profile" width={200} height={200}/>
              </div>
           </div>
           ))}

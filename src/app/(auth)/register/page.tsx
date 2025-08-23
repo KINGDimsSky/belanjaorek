@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [message, Setmessage] = useState<string | undefined>('');
+  const [Loading, SetLoading] = useState<boolean>(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -36,14 +37,19 @@ export default function RegisterPage() {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    Setmessage('');
+    SetLoading(true);
+
     RegisterUser(values)
     .then((data) => {
       if (!data.status){
-        return Setmessage(data.message)
+        Setmessage(data.message)
+        SetLoading(false);
+      }else {
+        form.reset();
+        SetLoading(false);
+        router.push('/login')
       }
-
-      form.reset();
-      router.push('/login')
     })
   }
 
@@ -122,10 +128,11 @@ export default function RegisterPage() {
               />
               <Button
                 type="submit"
+                disabled={Loading}
                 variant={"default"}
                 size={"sm"}
-                className="w-full text-white">
-                Register
+                className={`w-full text-white ${Loading ? "bg-foreground disabled: cursor-progress text-background" : ""}`}>
+                {Loading ? "Loading" : "Register"}
               </Button>
             </form>
           </Form>

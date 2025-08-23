@@ -6,6 +6,7 @@ import { RemoveSpaceAndReplaceWithHypen } from "./utils";
 import * as z from "zod";
 import { LoginSchema, RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
+import { GetUserByEmail } from "./services";
 
 
 export async function CreateAPost(formData: FormData) {
@@ -26,10 +27,6 @@ export async function CreateAPost(formData: FormData) {
   console.log("Succes Creating a Post!");
 }
 
-export async function deletedPost(cuid: string) {
-  await prisma.posts.delete({ where: { id: cuid } });
-}
-
 export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   const validatedFields = RegisterSchema.safeParse(values);
 
@@ -37,13 +34,9 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
     return { message: `Wrong Fields!`, status: false };
   }
 
-  const AlreadyRegisterd = await prisma.user.findUnique({
-    where: {
-      email: values.email,
-    },
-  });
+  const ExistingUser = await GetUserByEmail(values.email)
 
-  if (AlreadyRegisterd) {
+  if (ExistingUser) {
     return { message: "Email Already Registered!", status: false };
   }
 
@@ -59,30 +52,4 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
     message: `${values.username} Successfully added to Database!`,
     status: true,
   };
-}
-
-export async function ValidatingUser(values: z.infer<typeof LoginSchema>) {
-  const validatedFields = LoginSchema.safeParse(values);
-  console.log (values)
-
-  if (!validatedFields) {
-    return {message: 'Wrong Fields!', status: false}
-  }
-
-  const RegisteredUser = await prisma.user.findUnique({
-    where : {
-        email : values.email
-    }
-  })
-
-  if (!RegisteredUser) {
-    return {message: 'Email Not Found!', status: false}
-  }
-
-  return { message: 'Successfully', status: true}
-}
-
-
-export async function GetProducts () {
-    return console.log ('Tempeks On Progress...')
 }
