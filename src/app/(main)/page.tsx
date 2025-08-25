@@ -1,6 +1,7 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import CategoryCard from "@/components/sharedComponents/CategoryCard";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen items-center mt-20">
       <MaxWidthWrapper className="flex flex-col items-center">
@@ -12,8 +13,9 @@ export default function Home() {
             high premium quality, affordable prices, with Belanjaorek We Said Happy Shopping!
           </p>
         </div>
-        <div className="mt-12">
-          
+        <div className="flex flex-col w-full mt-24">
+          <h1 className="font-bold text-2xl uppercase tracking-wider mb-4">What's HOT</h1>
+          <CategoryCard/>
         </div>
       </MaxWidthWrapper>
     </div>

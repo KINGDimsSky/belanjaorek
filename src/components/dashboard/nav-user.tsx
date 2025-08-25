@@ -29,7 +29,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { Skeleton } from "../ui/skeleton"
 
 
@@ -86,18 +86,18 @@ export function NavUser({user} : any) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                Account Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                Payments
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
@@ -105,8 +105,8 @@ export function NavUser({user} : any) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
+            <DropdownMenuItem onClick={() => signOut()}>
+              <LogOut/>
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

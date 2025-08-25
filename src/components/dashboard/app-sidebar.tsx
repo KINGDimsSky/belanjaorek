@@ -2,12 +2,9 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
   Frame,
-  GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
@@ -26,7 +23,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
 const data = {
   user: {
     name: "KINGDimsSky",
@@ -41,11 +37,11 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Analytics",
+          url: "/dashboard",
         },
         {
-          title: "Starred",
+          title: "History Selling",
           url: "#",
         },
       ],
@@ -56,34 +52,26 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "Add Product",
           url: "#",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "Manage Product",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Blogs",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Add Blog",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
+          title: "Manage Blog",
           url: "#",
         },
         {
@@ -93,26 +81,22 @@ const data = {
       ],
     },
     {
-      title: "Settings",
+      title: "Users Settings",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "Manage Users",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Users Data",
           url: "#",
         },
         {
-          title: "Billing",
+          title: "History",
           url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
+        }
       ],
     },
   ],
@@ -139,9 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <div className="flex gap-4 items-center">
-          <h2>Belanjaorek</h2>
-        </div>
+        <TeamSwitcher/>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
