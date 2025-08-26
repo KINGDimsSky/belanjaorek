@@ -1,7 +1,8 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import CategoryCard from "@/components/sharedComponents/CategoryCard";
+import CarouselSlide from "@/components/sharedComponents/Carousel-Slide";
+import ForYouProduct from "@/components/sharedComponents/ForYou-product";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div className="flex flex-col min-h-screen items-center mt-20">
       <MaxWidthWrapper className="flex flex-col items-center">
@@ -13,11 +14,20 @@ export default async function Home() {
             high premium quality, affordable prices, with Belanjaorek We Said Happy Shopping!
           </p>
         </div>
-        <div className="flex flex-col w-full mt-24">
-          <h1 className="font-bold text-2xl uppercase tracking-wider mb-4">What's HOT</h1>
-          <CategoryCard/>
+        <div className="flex flex-col w-full mt-28">
+          <h1 className="font-bold text-3xl uppercase tracking-wider mb-4">What's HOT</h1>
+            <CarouselSlide/>
+          <div className="">
+            <h2 className="font-bold text-2xl uppercase tracking-tight mt-24 mb-4">For You</h2>
+            <ForYouProduct/>
+          </div>
         </div>
       </MaxWidthWrapper>
+      <div className="mt-24 bg-foreground/10 w-full">
+        <MaxWidthWrapper>
+          <h2>Anjay Mabar</h2>
+        </MaxWidthWrapper>
+      </div>
     </div>
   );
 }
