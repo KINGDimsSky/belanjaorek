@@ -1,3 +1,4 @@
+import ProductCard from "../products/product-card";
 
 
 export default async function ForYouProduct() {
@@ -15,8 +16,8 @@ export default async function ForYouProduct() {
           <h2 className="uppercase underline font-semibold cursor-pointer">View all</h2>
         </div>
       </div>
-      <div className=" mt-12">
-        <h2>Iki Ngko Product e</h2>
+      <div className="mt-12">
+        <ProductCard/>
       </div>
     </div>
   );
