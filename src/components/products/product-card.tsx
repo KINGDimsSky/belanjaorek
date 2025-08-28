@@ -15,14 +15,14 @@ export default function ProductCard() {
     }
 
     return (
-        <div className="relative pb-10 flex flex-col w-80 hover:border hover:border-foreground">
-            <div className="relative object-fill overflow-hidden h-80">
+        <div className="relative pb-10 flex flex-col w-64 hover:border hover:border-foreground">
+            <div className="relative object-fill overflow-hidden h-64">
               <Image src={'/products/GtaSanSkinFnG.jpeg'} alt="AdidasRunningShoes" fill 
               className="object-cover"/>
             </div>
-            <h2 className="px-2 mt-3 text-xs tracking-wide text-foreground/90">SAMP Assets</h2>
-            <p className="text-sm tracking-tight px-2 mt-3">FnG SummerHouse Hustler SkinPack</p>
-            <p className="text-sm  px-2 mt-1 text-foreground/90 font-extralight">Rp. 180.000</p>
+            <h2 className="px-2 mt-3 text-xs tracking-wide text-foreground/90">SAMP</h2>
+            <p className="text-sm tracking-tight px-2 mt-2">FnG SummerHouse Hustler SkinPack</p>
+            <p className="text-xs px-2 mt-1 text-foreground/90 font-extralight">Rp. 180.000</p>
             <div className="absolute top-2 left-2">
               <h2 className="bg-background text-foreground px-2 py-1 tracking-tight font-light">NEW</h2>
             </div>

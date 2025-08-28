@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import CategoryCard from "./CategoryCard"
+import CategoryCard from "../products/CategoryCard"
 import { MdNavigateNext } from "react-icons/md"
 import { GrFormPrevious } from "react-icons/gr";
 

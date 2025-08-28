@@ -1,6 +1,6 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import ForYouProduct from "@/components/products/ForYou-product";
 import CarouselSlide from "@/components/sharedComponents/Carousel-Slide";
-import ForYouProduct from "@/components/sharedComponents/ForYou-product";
 import { Button } from "@/components/ui/button";
 import { GrLinkNext } from "react-icons/gr";
 
@@ -21,7 +21,7 @@ export default function Home() {
             <CarouselSlide/>
           <div className="">
             <h2 className="font-bold text-2xl uppercase tracking-tight mt-24 mb-4">For You</h2>
-            <ForYouProduct/>
+              <ForYouProduct/>
           </div>
         </div>
       </MaxWidthWrapper>
