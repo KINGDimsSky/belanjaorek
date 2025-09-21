@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import z from "zod";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage () {
@@ -54,7 +54,7 @@ export default function LoginPage () {
           Welcome back!, Please enter your details.
         </p>
         <div className="">
-          <Button variant={"outline"} size={"sm"} className="w-full">
+          <Button onClick={() => signIn('google', {callbackUrl: '/', redirect: false})} variant={"outline"} size={"sm"} className="w-full">
             <p>Login With Google</p>
             <FcGoogle />
           </Button>

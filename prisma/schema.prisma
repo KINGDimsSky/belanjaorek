@@ -17,11 +17,12 @@ model User {
   id       String    @id @default(cuid())
   email    String    @unique
   username String    @unique
-  password String
+  password String?
   role     String    @default("user")
-  image    String    @default("/user.png")
+  image    String?    @default("/user.png")
   Posts    Posts[]
   Product  Product[]
+  TwoVerificationStep Boolean @default(false) @map("2fa")
 
   @@index(email)
   @@map("users")
@@ -36,8 +37,6 @@ model Product {
   DiscountPrice Int?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  
-
   Seller     User     @relation(fields: [userId], references: [id])
   userId     String
   category   Category @relation(fields: [categoryId], references: [id])

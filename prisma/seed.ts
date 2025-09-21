@@ -17,7 +17,8 @@ const intialPost: Prisma.PostsCreateInput[] = [
           username: "dimssky",
           password: "abogoboga",
           role : 'admin',
-          image : '/dimas.jpg'
+          image : '/dimas.jpg',
+          TwoVerificationStep: true,
         },
       },
     },

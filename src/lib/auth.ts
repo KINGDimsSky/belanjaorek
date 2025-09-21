@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { UserLoginValidate } from "./services";
+import { GoogleLogin, UserLoginValidate } from "./services";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
@@ -54,11 +54,23 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (account?.provider === "google") {
-        /* await GoogleLogin({
-          name: user.name as string,
-          email: user.email as string,
-          image: user.image as string,
-        }); */
+        if (!user?.email) {
+          console.error("Login Google gagal karena tidak ada email.");
+          return token; 
+        }
+       const result = await GoogleLogin({
+          email : user.email,
+          username: user.name,
+          image: user.image
+        })
+
+        if (result) {
+          token.id = result.id
+          token.email = result.email
+          token.name = result.username
+          token.role = result.role
+          token.picture = result.image
+        }
       }
 
       return token;

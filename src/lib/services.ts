@@ -6,6 +6,10 @@ export async function UserLoginValidate(email : string, password : string) {
 
   if (!IsExisting) return null;
 
+  if (!IsExisting.password) {
+    return null;
+  }
+
   const IsCompare = await bcrypt.compare(password, IsExisting.password);
   if (!IsCompare) return null;
 
@@ -23,3 +27,29 @@ export async function GetUserByEmail(email: string) {
 
   return IsFound
 }
+
+export async function GoogleLogin(data : {
+  email : string,
+  username?: string | null,
+  image?: string | null,
+}) {
+  const existingUser = await GetUserByEmail(data.email);
+
+  if (existingUser) {
+    console.log("Google user found in DB:", data.email);
+    return existingUser;
+  }
+
+  console.log("Google user not found, creating new user:", data.email);
+  const newUser = await prisma.user.create({
+    data: {
+      email: data.email,
+      username: data.username || data.email.split('@')[0],
+      image: data.image,
+    },
+  });
+
+  return newUser;
+}
+
+

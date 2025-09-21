@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { RegisterUser } from "@/lib/actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const [message, Setmessage] = useState<string | undefined>('');
@@ -62,7 +63,7 @@ export default function RegisterPage() {
           Welcome Stranger!, Please enter your details.
         </p>
         <div className="">
-          <Button variant={"outline"} size={"sm"} className="w-full">
+          <Button onClick={() => signIn('google', {callbackUrl: '/' ,redirect: false})} variant={"outline"} size={"sm"} className="w-full">
             <p>Register With Google</p>
             <FcGoogle />
           </Button>

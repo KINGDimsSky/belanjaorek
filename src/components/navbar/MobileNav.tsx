@@ -26,11 +26,11 @@ export default function MobileNav ({state, setState} : {state : boolean, setStat
         <div className="fixed flex justify-end top-0 z-10 min-h-screen min-w-full bg-black/65">
             <div ref={ref} className="relative bg-background w-80 py-4 px-4 rounded-lg border border-foreground/25">
                 <div className="flex items-center gap-2">
-                  <div className="relative w-12 h-12 rounded-full object-cover overflow-hidden">
-                    <Image src={session?.user?.image || ''} width={400} height={400} alt="User Profile" className=""/>
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                    <Image src={session?.user?.image || ''} width={48} height={48} alt="User Profile" className={`${session?.user?.image ? "object-cover" : "object-contain bg-gray-100"}`}/>
                   </div>
                   <div className="flex flex-col ">
-                    <h2 className="text-sm font-medium">{session?.user?.email}</h2>
+                    <h2 className="text-sm font-medium truncate max-w-[180px]" title={session?.user?.email || ''}>{session?.user?.email}</h2>
                     <h2 className="text-sm">{session?.user?.name}</h2>
                   </div>
                   <div className="flex gap-2 ml-auto">
