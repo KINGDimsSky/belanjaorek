@@ -12,12 +12,18 @@ export async function GET(req: NextRequest) {
                     slug : category || 'All'
                 }
             },
+            include : {
+                category : true,
+            },
             take : 10
         })
         return NextResponse.json({message: 'Success', status:200, data: product}, {status: 200})
     }
     
     const GetAllProducts = await prisma.product.findMany({
+        include : {
+            category : true,
+        },
         take : 10
     })
     return NextResponse.json({message: 'Success', status: 200, data: GetAllProducts}, {status: 200})

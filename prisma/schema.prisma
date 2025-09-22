@@ -14,33 +14,35 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(cuid())
-  email    String    @unique
-  username String    @unique
-  password String?
-  role     String    @default("user")
-  image    String?    @default("/user.png")
-  Posts    Posts[]
-  Product  Product[]
-  TwoVerificationStep Boolean @default(false) @map("2fa")
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  username            String    @unique
+  password            String?
+  role                String    @default("user")
+  image               String?   @default("/user.png")
+  Posts               Posts[]
+  Product             Product[]
+  TwoVerificationStep Boolean   @default(false) @map("2fa")
 
   @@index(email)
   @@map("users")
 }
 
 model Product {
-  id         String   @id @default(cuid())
-  name       String
-  price      Int
-  IsDiscount Boolean  @default(false) @map("isdiscount")
-  Stock Int
+  id            String   @id @default(cuid())
+  name          String
+  slug          String
+  price         Int
+  image         String?  @default("/NoProduct.jpg")
+  IsDiscount    Boolean  @default(false) @map("isdiscount")
+  Stock         Int
   DiscountPrice Int?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Seller     User     @relation(fields: [userId], references: [id])
-  userId     String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Seller        User     @relation(fields: [userId], references: [id])
+  userId        String
+  category      Category @relation(fields: [categoryId], references: [id])
+  categoryId    String
 
   @@map("product")
 }

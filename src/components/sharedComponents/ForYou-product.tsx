@@ -58,7 +58,7 @@ export default function ForYouProduct() {
           ) : (
             <div>
               {Product.map((product, idx) => (
-                <ProductCard key={idx} />
+                <ProductCard key={idx} product={product}/>
               ))}
             </div>
           )}

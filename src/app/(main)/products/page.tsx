@@ -8,13 +8,39 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { prisma } from "@/lib/db";
-import { Link, SlashIcon } from "lucide-react";
+import { SlashIcon } from "lucide-react";
 import { FaCheck, FaTruckMoving } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { IoReturnUpBackSharp } from "react-icons/io5";
 
-export default async function ProductsPage() {
+interface ProductsPageProps {
+  searchParams: {
+    category?: string;
+    sort?: string;
+    // filter lain cak otw misal: discount?: 'true'
+  }
+}
+
+export default async function ProductsPage({searchParams} : ProductsPageProps) {
+  const { category, sort } = searchParams;
   const productsLength = await prisma.product.count();
+
+  const products = await prisma.product.findMany({
+    where: {
+      ...(category && category !== 'all' && {
+        category: { slug: category },
+      }),
+    },
+    orderBy: {
+       ...(sort === 'newest' && { createdAt: 'desc' }),
+    },
+    include: {
+        category: true 
+    },
+    take: 12,
+  });
+  
+  const categories = await prisma.category.findMany();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -64,7 +90,7 @@ export default async function ProductsPage() {
               [{productsLength}]
             </p>
           </div>
-          <AllProducts />
+          <AllProducts products={products} categories={categories} />
         </div>
       </MaxWidthWrapper>
     </div>
