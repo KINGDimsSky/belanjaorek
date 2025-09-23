@@ -14,37 +14,64 @@ datasource db {
 }
 
 model User {
-  id                  String    @id @default(cuid())
-  email               String    @unique
-  username            String    @unique
+  id                  String     @id @default(cuid())
+  email               String     @unique
+  username            String     @unique
   password            String?
-  role                String    @default("user")
-  image               String?   @default("/user.png")
+  role                String     @default("user")
+  image               String?    @default("/user.png")
   Posts               Posts[]
   Product             Product[]
-  TwoVerificationStep Boolean   @default(false) @map("2fa")
+  TwoVerificationStep Boolean    @default(false) @map("2fa")
+  Wishlist            Wishlist[]
+  Cart                Cart[]
 
   @@index(email)
   @@map("users")
 }
 
 model Product {
-  id            String   @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String
   slug          String
   price         Int
-  image         String?  @default("/NoProduct.jpg")
-  IsDiscount    Boolean  @default(false) @map("isdiscount")
+  image         String?    @default("/NoProduct.jpg")
+  IsDiscount    Boolean    @default(false) @map("isdiscount")
   Stock         Int
   DiscountPrice Int?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  Seller        User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  Seller        User       @relation(fields: [userId], references: [id])
   userId        String
-  category      Category @relation(fields: [categoryId], references: [id])
+  category      Category   @relation(fields: [categoryId], references: [id])
   categoryId    String
+  Wishlist      Wishlist[]
+  Cart          Cart[]
 
   @@map("product")
+}
+
+model Wishlist {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@unique([userId, productId])
+  @@map("wishlist")
+}
+
+model Cart {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int     @default(1)
+
+  @@unique([userId, productId])
+  @@map("cart")
 }
 
 model Category {
