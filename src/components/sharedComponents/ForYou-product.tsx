@@ -10,6 +10,7 @@ const Data = [
   { name: "Unity Assets", slug: "unity-assets" },
   { name: "SAMP", slug: "samp" },
   { name: "Icons", slug: "icons" },
+  { name: "Design", slug: "design" },
 ];
 
 export default function ForYouProduct() {

@@ -59,7 +59,9 @@ export default function AllProducts({ products, categories }: AllProductsProps) 
             <ProductCard key={i} product={product}/>
           ))
         ) : (
-          <p>Tidak ada produk yang ditemukan.</p>
+          <div className="col-span-5">
+            <p className="text-center">Tidak ada produk yang ditemukan.</p>
+          </div>
         )}
       </div>
     </div>

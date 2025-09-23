@@ -20,11 +20,17 @@ import { signIn, useSession } from "next-auth/react";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 import CartDrawer from "./CartDrawer";
+import Whislist from "./Whislist";
 
 export default function Navbar() {
   const [clicked, SetClicked] = useState<boolean>(false);
   const [drawer, SetDrawer] = useState<boolean>(false);
+  const [whislist, SetWhislist] = useState<boolean>(false);
   const {data: session, status} = useSession();
+
+  useEffect(() => {
+    console.log (whislist)
+  }, [whislist])
 
   return (
     <div className="w-full justify-between items-center">
@@ -71,12 +77,12 @@ export default function Navbar() {
           ))}
           <div className="flex gap-4">
             <ShoppingCart onClick={() => SetDrawer(!drawer)} className="hover:text-primary cursor-pointer"/>
-            <Heart className="hover:text-primary cursor-pointer"/>
+            <Heart onClick={() => SetWhislist(!whislist)} className="hover:text-primary cursor-pointer"/>
           </div>        
         </div>
         <div className="flex gap-4 lg:hidden">
           <ShoppingCart onClick={() => SetDrawer(!drawer)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
-          <Heart className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <Heart onClick={() => SetWhislist(!whislist)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
           <Menu onClick={() => SetClicked(!clicked)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
         </div>
       </MaxWidthWrapper>
@@ -87,6 +93,11 @@ export default function Navbar() {
       )}
       {drawer ? (
         <CartDrawer state={drawer} setState={SetDrawer}/>
+      ) : (
+        null
+      )}
+      {whislist ? (
+        <Whislist state={whislist} setState={SetWhislist}/>
       ) : (
         null
       )}
