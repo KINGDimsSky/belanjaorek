@@ -4,8 +4,7 @@ import { useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import ProductCard from "../products/product-card";
-
-import type { Product, Category } from "@prisma/client";
+import type {Category} from "@prisma/client";
 import { ProductWithCategory } from "@/types";
 
 interface AllProductsProps {
@@ -18,28 +17,28 @@ export default function AllProducts({ products, categories }: AllProductsProps) 
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      return params.toString();
-    },
-    [searchParams]
-  );
-  
-  const handleFilterClick = (filterType: string, value: string) => {
-    router.push(pathname + '?' + createQueryString(filterType, value));
+ const handleFilterClick = (filterType: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (params.get(filterType) === value) {
+      params.delete(filterType);
+    } else {
+      params.set(filterType, value);
+    }
+
+    const queryString = params.toString();
+    router.push(pathname + (queryString ? `?${queryString}` : ""));
   };
   
   const activeCategory = searchParams.get('category') || 'all';
-  const activeSort = searchParams.get('sort') || 'newest';
+  const activeSort = searchParams.get('sort');
 
   return (
     <div className="flex flex-col mt-6">
       <div className="flex justify-between mb-12 border border-foreground/50 p-2">
         <div className="flex gap-4">
           <button onClick={() => handleFilterClick('sort', 'newest')}
-            className={cn("hover:border hover:border-foreground/50 px-2 py-1 cursor-pointer", activeSort === 'newest' && "bg-gray-200 text-background")}>
+            className={cn("hover:border hover:border-foreground/50 px-2 py-1 cursor-pointer", activeSort == "newest" ? "bg-gray-200 text-background" : "bg-background text-foreground")}>
             Newest
           </button>
           {categories.map((cat) => (
