@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Category, Product } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -17,7 +18,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { name, price, image, IsDiscount, category, createdAt } = product;
+  const { name, price, image, IsDiscount, category, createdAt, slug } = product;
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   const createdDate = new Date(createdAt); 
@@ -37,11 +38,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="relative pb-10 flex flex-col w-64 hover:border hover:border-foreground">
-      <div className="relative object-fill overflow-hidden h-64">
+      <Link href={`/product/${slug}`} className="relative object-fill overflow-hidden h-64">
         <Image src={image || '/default-image.png'} alt={name} fill className="object-cover"/>
-      </div>
-      <h2 className="px-2 mt-3 text-xs tracking-wide text-foreground/90">{category.title}</h2>
-      <p className="text-sm tracking-tight px-2 mt-2">{name}</p>
+      </Link>
+      <Link href={`/products?category=${category.slug}`} className="hover:text-primary px-2 mt-3 text-xs tracking-wide text-foreground/90">{category.title}</Link>
+      <Link href={`/product/${slug}`} className="text-sm tracking-tight px-2 mt-2 hover:text-foreground/85">{name}</Link>
       <p className="text-xs px-2 mt-1 text-foreground/90 font-extralight">
         {new Intl.NumberFormat("id-ID", {
           style: "currency",
