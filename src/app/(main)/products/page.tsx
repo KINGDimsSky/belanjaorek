@@ -17,12 +17,14 @@ interface ProductsPageProps {
   searchParams: {
     category?: string;
     sort?: string;
-    // filter lain cak otw misal: discount?: 'true'
+    discount?: string;
+    filter?: string;
+    // filter lain cak otw misal: sex?: 'true'
   }
 }
 
 export default async function ProductsPage({searchParams} : ProductsPageProps) {
-  const { category, sort } = searchParams;
+  const { category, sort, discount, filter } = searchParams;
   const productsLength = await prisma.product.count();
 
   const products = await prisma.product.findMany({
@@ -30,9 +32,16 @@ export default async function ProductsPage({searchParams} : ProductsPageProps) {
       ...(category && category !== 'all' && {
         category: { slug: category },
       }),
+
+      ...(discount && discount !== "false" && {
+        IsDiscount: true,
+      })
     },
     orderBy: {
        ...(sort === 'newest' && { createdAt: 'desc' }),
+       ...(filter && filter !== 'default' && {
+        
+       })
     },
     include: {
         category: true 
