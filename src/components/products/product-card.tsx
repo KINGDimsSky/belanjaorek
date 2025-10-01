@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from "@/lib/utils";
-import { Category, Product } from "@prisma/client";
+import { ProductWithCategory } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -9,15 +9,7 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "sonner";
 
-type ProductWithCategory = Product & {
-  category: Category;
-};
-
-interface ProductCardProps {
-  product: ProductWithCategory;
-}
-
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product } : {product : ProductWithCategory}) {
   const { name, price, image, IsDiscount, category, createdAt, slug } = product;
   const [isLiked, setIsLiked] = useState<boolean>(false);
 

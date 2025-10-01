@@ -1,20 +1,28 @@
-import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-export function RemoveSpaceAndReplaceWithHypen (string : string) {
-  return string.toLowerCase().replace(/[^\w\-]+/g, '-')
+export function RemoveSpaceAndReplaceWithHypen(string: string) {
+  return string.toLowerCase().replace(/[^\w\-]+/g, "-");
+}
+
+export function ToLocalePriceFormat(price: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(price);
 }
 
 export function constructMetadata({
-  title = 'Belanjaorek - The Best Marketplace For Digital Assets',
-  description = 'Belanjaorek Selling High Quality Assets Like Models, Icons, Mockup, and Others... Made By DimsSky',
-  image = '/kncstudio.png',
-  icons = '/logo.png',
+  title = "Belanjaorek - The Best Marketplace For Digital Assets",
+  description = "Belanjaorek Selling High Quality Assets Like Models, Icons, Mockup, and Others... Made By DimsSky",
+  image = "/none.png",
+  icons = "/logo.png",
   noIndex = false,
 }: {
   title?: string;
@@ -36,14 +44,14 @@ export function constructMetadata({
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       images: [image],
-      creator: '@joshtriedcoding',
+      creator: "@joshtriedcoding",
     },
     icons,
-    metadataBase: new URL('https://digitalhippo.up.railway.app'),
+    metadataBase: new URL("https://digitalhippo.up.railway.app"),
     ...(noIndex && {
       robots: {
         index: false,

@@ -33,7 +33,7 @@ model User {
 model Product {
   id            String     @id @default(cuid())
   name          String
-  slug          String
+  slug          String  @unique
   price         Int
   image         String?    @default("/NoProduct.jpg")
   IsDiscount    Boolean    @default(false) @map("isdiscount")
