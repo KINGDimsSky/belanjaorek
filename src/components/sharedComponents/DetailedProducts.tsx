@@ -14,7 +14,10 @@ import Image from "next/image";
 import { GoVerified } from "react-icons/go";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { ToLocalePriceFormat } from "@/lib/utils";
-import { Badge } from "../ui/badge";
+import { useState } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { IoShieldSharp } from "react-icons/io5";
+import { Button } from "../ui/button";
 
 
 function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Category?: Category}) {
@@ -46,7 +49,7 @@ function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Categ
 }
 
 export default function DetailedProductComponent({ products } : {products : ProductWithUsersAndCategory}) {
-  console.log (products)
+  const [amount, setAmount] = useState<number>(1)
 
   return (
     <div className="flex flex-col mt-6">
@@ -62,7 +65,7 @@ export default function DetailedProductComponent({ products } : {products : Prod
               <GoVerified/>
               <h2>Verified Products</h2>
             </div>
-            <h2 className="text-xl font-medium max-w-[25rem] mb-4">{products.name}</h2>
+            <h2 className="text-2xl font-semibold max-w-[25rem] mb-4">{products.name}</h2>
             <div className="flex justify-between gap-2 items-center">
               <div className="flex gap-2 items-center">
                 <div className="relative rounded-full overflow-hidden bg-green-600 w-6 h-6">
@@ -87,8 +90,62 @@ export default function DetailedProductComponent({ products } : {products : Prod
               </div>
             </div>
             <p className="mt-4 text-2xl text-primary font-semibold">{ToLocalePriceFormat(products.price)}</p>
-            <div className="flex gap-2 mt-6">
+            <div className="flex items-center gap-4 mt-6">
                <p className="text-sm font-light ">Amount</p>
+               <div className="flex border border-primary rounded-md w-32 h-10 items-center justify-between px-4">
+                  <button onClick={() => setAmount((prevState) => prevState - 1)} className="text-xl">-</button>
+                  <p>{amount}</p>
+                  <button onClick={() => setAmount((prevState) => prevState + 1)} className="text-xl">+</button>
+               </div>
+            </div>
+            <p className="text-xs mt-4">Updated price and taxes/VAT calculated at checkout</p>
+            <div className="w-full border-t  mt-2"></div>
+            <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="flex gap-2">
+                  <div className="flex gap-2 items-center">
+                    <IoShieldSharp className="w-5 h-5"/>
+                    <p>Guaranted Return</p>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="flex">
+                  <p className="text-xs tracking-tight w-96">
+                    This assets is covered by the Belanjaorek Refund Policy Please see the <a href="" className="text-primary">EULA</a> for Details.
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <div className="flex gap-4 mt-4">
+              <Button className="flex items-center font-semibold text-white w-full" variant={'default'}>
+                Add to Cart
+              </Button>
+              <Button className="border border-foreground/50" variant={'ghost'}>
+                <FaHeart className="text-white"/>
+              </Button>
+            </div>
+            <div className="flex justify-between w-full mt-3 items-center">
+               <p className="text-xs tracking-tight">Secure Checkout</p>
+               <div className="relative w-56 h-5">
+                 <Image className="object-center" src={'/Payment.png'} fill alt="SummerHouse Hustlers"/>
+               </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-8">
+              <div className="flex justify-between text-xs">
+                <p>Licenses Agreement</p>
+                <p className="text-blue-500">Standard Belanjaorek Assets EULA</p>
+              </div>
+              <div className="flex justify-between text-xs">
+                <p>File Size</p>
+                <p>10,2 MB</p>
+              </div>
+              <div className="flex justify-between text-xs">
+                <p>Latest Version</p>
+                <p>2.1.2</p>
+              </div>
+              <div className="flex justify-between text-xs">
+                <p>Release Date</p>
+                <p>27 August, 2025</p>
+              </div>
             </div>
          </div>
       </div>
