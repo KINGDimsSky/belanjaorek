@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { IoShieldSharp } from "react-icons/io5";
 import { Button } from "../ui/button";
+import { UsecartStore } from "@/store/cart-store";
 
 
 function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Category?: Category}) {
@@ -50,6 +51,14 @@ function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Categ
 
 export default function DetailedProductComponent({ products } : {products : ProductWithUsersAndCategory}) {
   const [amount, setAmount] = useState<number>(1)
+  const addToCart = UsecartStore((state) => state.addToCart);
+
+
+  const DecreaseAmount = () => {
+    if (amount >= 2){
+     setAmount((prevstate) => prevstate -1);
+    } 
+  }
 
   return (
     <div className="flex flex-col mt-6">
@@ -93,7 +102,7 @@ export default function DetailedProductComponent({ products } : {products : Prod
             <div className="flex items-center gap-4 mt-6">
                <p className="text-sm font-light ">Amount</p>
                <div className="flex border border-primary rounded-md w-32 h-10 items-center justify-between px-4">
-                  <button onClick={() => setAmount((prevState) => prevState - 1)} className="text-xl">-</button>
+                  <button onClick={DecreaseAmount} className="text-xl">-</button>
                   <p>{amount}</p>
                   <button onClick={() => setAmount((prevState) => prevState + 1)} className="text-xl">+</button>
                </div>
@@ -116,11 +125,11 @@ export default function DetailedProductComponent({ products } : {products : Prod
               </AccordionItem>
             </Accordion>
             <div className="flex gap-4 mt-4">
-              <Button className="flex items-center font-semibold text-white w-full" variant={'default'}>
+              <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full" variant={'default'}>
                 Add to Cart
               </Button>
               <Button className="border border-foreground/50" variant={'ghost'}>
-                <FaHeart className="text-white"/>
+                <FaHeart className="text-foreground"/>
               </Button>
             </div>
             <div className="flex justify-between w-full mt-3 items-center">

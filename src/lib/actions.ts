@@ -7,6 +7,9 @@ import * as z from "zod";
 import { RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
 import { GetUserByEmail } from "./services";
+import { CartItem } from "@/store/cart-store";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth";
 
 
 export async function CreateAPost(formData: FormData) {
@@ -54,4 +57,27 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   };
 }
 
+export async function SaveToDBCart (items: CartItem[]) {
+  const session = await getServerSession(authOptions);
+  
+  if (!session?.user.id) {
+    return {error: 'Must Login to Use Cart Features!', status: false};
+  }
+  const user = session.user.id;
+  
+  try {
+    await prisma.cart.create({
+      data : {
+        userId: user,
+        product : {
+          
+        }
+      }
+    })
+    
+  }catch {
+
+  }
+
+}
 
