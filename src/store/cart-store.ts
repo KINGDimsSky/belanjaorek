@@ -14,7 +14,7 @@ interface CartState {
 }   
 
 export const UsecartStore = create<CartState>((set) => ({
-    cartItems: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems') as string) || "" : [],
+    cartItems: JSON.parse(localStorage.getItem('cartItems') ?? '[]') || [],
 
     addToCart: (product) => set((state) => {
         const ExistingItem = state.cartItems.find((item) => item.id === product.id);
@@ -28,9 +28,11 @@ export const UsecartStore = create<CartState>((set) => ({
             return {cartItems : [...state.cartItems, {...product, quantity: 1}]};
         }
     }),
-    removeFromCart: (productID) => set((state) => ({
-        cartItems: state.cartItems.filter((item) => item.id !== productID)
-    })),
+    removeFromCart: (productID) => set((state) => {
+        const UpdatedItem = state.cartItems.filter((item) => item.id !== productID)
+
+        return {cartItems: UpdatedItem}
+    }),
 
     clearCart: () => set({cartItems : []})
 }))
