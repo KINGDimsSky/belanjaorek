@@ -7,9 +7,9 @@ import * as z from "zod";
 import { RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
 import { GetUserByEmail } from "./services";
-import { CartItem } from "@/store/cart-store";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
+import { CartItem } from "@/types";
 
 
 export async function CreateAPost(formData: FormData) {
@@ -57,7 +57,7 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   };
 }
 
-export async function SaveToDBCart (items: CartItem[]) {
+export async function SaveToDBCart (items: CartItem[]) { //Belum sempurna masih tahap fixing
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
@@ -69,15 +69,13 @@ export async function SaveToDBCart (items: CartItem[]) {
     await prisma.cart.create({
       data : {
         userId: user,
-        product : {
-          
-        }
+        productId: items[0].id,
+        quantity: items[0].quantity
       }
     })
-    
+    return {message: 'Cart Saved to Database!', status: true};
   }catch {
-
+    return {error: 'Failed to Save Cart to Database!', status: false};
   }
-
 }
 

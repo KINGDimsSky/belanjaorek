@@ -1,10 +1,9 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Product } from '@prisma/client';
 import { toast } from 'sonner';
+import { CartItem } from '@/types';
 
-export interface CartItem extends Product {
-    quantity: number;
-}
 
 interface CartState {
     cartItems: CartItem[];
@@ -13,8 +12,8 @@ interface CartState {
     clearCart: () => void;
 }   
 
-export const UsecartStore = create<CartState>((set) => ({
-    cartItems: JSON.parse(localStorage.getItem('cartItems') ?? '[]') || [],
+export const UsecartStore = create(persist<CartState>((set) => ({ //On Going To Be Finished
+    cartItems: [], 
 
     addToCart: (product) => set((state) => {
         const ExistingItem = state.cartItems.find((item) => item.id === product.id);
@@ -25,17 +24,23 @@ export const UsecartStore = create<CartState>((set) => ({
           toast.success('Product Added to Cart!');
           return {cartItems: UpdatedItem};
         }else {
+            localStorage.setItem('cartItems', JSON.stringify([...state.cartItems, {...product, quantity: 1}]))
+            toast.success('Product Added to Cart!');
             return {cartItems : [...state.cartItems, {...product, quantity: 1}]};
         }
     }),
     removeFromCart: (productID) => set((state) => {
         const UpdatedItem = state.cartItems.filter((item) => item.id !== productID)
-
+        localStorage.setItem('cartItems', JSON.stringify(UpdatedItem));
+        toast.success('Product Removed from Cart!');
         return {cartItems: UpdatedItem}
     }),
 
     clearCart: () => set({cartItems : []})
-}))
+}),
+    { name: 'cartItems' }
+))
+
 
 
 

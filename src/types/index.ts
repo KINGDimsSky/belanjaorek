@@ -9,3 +9,7 @@ export type ProductWithUsersAndCategory = Product & {
   category: Category;
 }
 
+export interface CartItem extends Product { 
+    quantity: number;
+}
+
