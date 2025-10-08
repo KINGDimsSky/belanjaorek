@@ -28,10 +28,6 @@ export default function Navbar() {
   const [whislist, SetWhislist] = useState<boolean>(false);
   const {data: session, status} = useSession();
 
-  useEffect(() => {
-    console.log (whislist)
-  }, [whislist])
-
   return (
     <div className="w-full justify-between items-center">
       <MaxWidthWrapper className="flex justify-between items-center py-4">

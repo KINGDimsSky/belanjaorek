@@ -19,7 +19,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { IoShieldSharp } from "react-icons/io5";
 import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
-
+import { UseWishListStore } from "@/store/wishlist-store";
 
 function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Category?: Category}) {
   return (
@@ -52,7 +52,7 @@ function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Categ
 export default function DetailedProductComponent({ products } : {products : ProductWithUsersAndCategory}) {
   const [amount, setAmount] = useState<number>(1)
   const addToCart = UsecartStore((state) => state.addToCart);
-
+  const AddWishlist = UseWishListStore((state) => state.ToggleWishlist);
 
   const DecreaseAmount = () => {
     if (amount >= 2){
@@ -128,7 +128,7 @@ export default function DetailedProductComponent({ products } : {products : Prod
               <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full" variant={'default'}>
                 Add to Cart
               </Button>
-              <Button className="border border-foreground/50" variant={'ghost'}>
+              <Button onClick={() => AddWishlist(products)} className="border border-foreground/50" variant={'ghost'}>
                 <FaHeart className="text-foreground"/>
               </Button>
             </div>

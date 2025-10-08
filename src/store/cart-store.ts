@@ -20,18 +20,15 @@ export const UsecartStore = create(persist<CartState>((set) => ({ //On Going To 
 
         if (ExistingItem) {
           const UpdatedItem = state.cartItems.map((item) => item.id === product.id ? {...item, quantity: item.quantity + 1} : item)
-          localStorage.setItem('cartItems', JSON.stringify(UpdatedItem));
           toast.success('Product Added to Cart!');
           return {cartItems: UpdatedItem};
         }else {
-            localStorage.setItem('cartItems', JSON.stringify([...state.cartItems, {...product, quantity: 1}]))
             toast.success('Product Added to Cart!');
             return {cartItems : [...state.cartItems, {...product, quantity: 1}]};
         }
     }),
     removeFromCart: (productID) => set((state) => {
         const UpdatedItem = state.cartItems.filter((item) => item.id !== productID)
-        localStorage.setItem('cartItems', JSON.stringify(UpdatedItem));
         toast.success('Product Removed from Cart!');
         return {cartItems: UpdatedItem}
     }),

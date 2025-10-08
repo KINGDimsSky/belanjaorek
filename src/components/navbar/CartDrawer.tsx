@@ -3,7 +3,7 @@
 import { useBodyScrollLock } from "@/hooks/use-body-scroll";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
@@ -20,7 +20,6 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
   const ref = useRef<HTMLDivElement>(null);
   useBodyScrollLock(state);
   useOnClickOutside(ref, () => setState(false));
-
 
   return (
     <div className="fixed flex z-10 top-0 justify-end min-h-screen w-full bg-background/65">
@@ -54,9 +53,13 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
           </div>
         )}
         <div className="items-end mt-auto text-foreground">
-          <Button variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
-            Checkout
-          </Button>
+          {CartItems.length ? (
+            <Button variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
+               Checkout
+            </Button>
+          ) : (
+            null
+          )}
         </div>
       </div>
     </div>

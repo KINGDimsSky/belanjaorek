@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from "@/lib/utils";
+import { UseWishListStore } from "@/store/wishlist-store";
 import { ProductWithCategory } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,8 +11,10 @@ import { FaHeart } from "react-icons/fa";
 import { toast } from "sonner";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
-  const { name, price, image, IsDiscount, category, createdAt, slug } = product;
+  const { name, price, image, IsDiscount, category, createdAt, slug, id} = product;
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const AddWishlist = UseWishListStore((state) => state.ToggleWishlist);
+  const RemoveWishlist = UseWishListStore((state) => state.RemoveFromWishlist);
 
   const createdDate = new Date(createdAt); 
   const now = new Date();
@@ -21,9 +24,9 @@ export default function ProductCard({ product } : {product : ProductWithCategory
 
   const handleLikeClick = () => {
     if (isLiked) {
-      toast("Product successfully removed from wishlist!");
+      RemoveWishlist(id);
     } else {
-      toast("Product successfully added to wishlist!");
+      AddWishlist(product);
     }
     setIsLiked(!isLiked);
   };
