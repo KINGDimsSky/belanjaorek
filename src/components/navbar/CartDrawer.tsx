@@ -8,6 +8,7 @@ import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
 import { ToLocalePriceFormat } from "@/lib/utils";
+import { SaveToDBCart } from "@/lib/actions";
 
 interface DrawerProps {
   state: boolean;
@@ -20,7 +21,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
   const ref = useRef<HTMLDivElement>(null);
   useBodyScrollLock(state);
   useOnClickOutside(ref, () => setState(false));
-
+  
   return (
     <div className="fixed flex z-10 top-0 justify-end min-h-screen w-full bg-background/65">
       <div ref={ref} className="relative flex flex-col p-4 w-80 min-h-screen bg-background border border-foreground/25">
@@ -54,7 +55,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
         )}
         <div className="items-end mt-auto text-foreground">
           {CartItems.length ? (
-            <Button variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
+            <Button onClick={() => SaveToDBCart(CartItems)} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
                Checkout
             </Button>
           ) : (

@@ -7,24 +7,26 @@ import { CartItem } from '@/types';
 
 interface CartState {
     cartItems: CartItem[];
+    amount: number;
     addToCart: (product: Product) => void;
     removeFromCart: (productId: string) => void;
     clearCart: () => void;
 }   
 
-export const UsecartStore = create(persist<CartState>((set) => ({ //On Going To Be Finished
+export const UsecartStore = create(persist<CartState>((set) => ({ 
     cartItems: [], 
+    amount: 1,
 
     addToCart: (product) => set((state) => {
         const ExistingItem = state.cartItems.find((item) => item.id === product.id);
 
         if (ExistingItem) {
-          const UpdatedItem = state.cartItems.map((item) => item.id === product.id ? {...item, quantity: item.quantity + 1} : item)
+          const UpdatedItem = state.cartItems.map((item) => item.id === product.id ? {...item, quantity: item.quantity + state.amount} : item)
           toast.success('Product Added to Cart!');
           return {cartItems: UpdatedItem};
         }else {
             toast.success('Product Added to Cart!');
-            return {cartItems : [...state.cartItems, {...product, quantity: 1}]};
+            return {cartItems : [...state.cartItems, {...product, quantity: state.amount}]};
         }
     }),
     removeFromCart: (productID) => set((state) => {

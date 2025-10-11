@@ -7,19 +7,20 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "../ui/breadcrumb";
+} from "../../../../../components/ui/breadcrumb";
 import type { Category } from "@prisma/client";
 import { ProductWithUsersAndCategory } from "@/types";
 import Image from "next/image";
 import { GoVerified } from "react-icons/go";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { ToLocalePriceFormat } from "@/lib/utils";
-import { useState } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { useEffect, useState } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../../../../components/ui/accordion";
 import { IoShieldSharp } from "react-icons/io5";
-import { Button } from "../ui/button";
+import { Button } from "../../../../../components/ui/button";
 import { UsecartStore } from "@/store/cart-store";
 import { UseWishListStore } from "@/store/wishlist-store";
+import DescProductComponent from "@/app/(main)/product/[slug]/components/AboutProducts";
 
 function BreadCrumbComponent({ prodName, Category } : {prodName ?: string, Category?: Category}) {
   return (
@@ -60,15 +61,22 @@ export default function DetailedProductComponent({ products } : {products : Prod
     } 
   }
 
+  useEffect(() => {
+    UsecartStore.setState({amount: amount})
+  }, [amount])
+
   return (
     <div className="flex flex-col mt-6">
       <BreadCrumbComponent prodName={products.name} Category={products.category}/>
       <div className="flex gap-6 mt-6">
-         <div className="relative w-[35rem] h-[25rem] bg-yellow-200">
+        <div className="flex flex-col">
+          <div className="relative w-[35rem] h-[25rem] bg-yellow-200">
             <Image className="object-cover" 
-            src={products?.image || '/NoProduct.jpg'}
-            alt={products.name} fill/>
-         </div>
+              src={products?.image || '/NoProduct.jpg'}
+              alt={products.name} fill/>
+          </div>
+          <DescProductComponent/>
+        </div>
          <div className="flex flex-col">
             <div className="flex items-center gap-1 text-sm font-light text-blue-500 mb-2">
               <GoVerified/>

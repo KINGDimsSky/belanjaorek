@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { toast } from "sonner";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
   const { name, price, image, IsDiscount, category, createdAt, slug, id} = product;

@@ -12,24 +12,6 @@ import { authOptions } from "./auth";
 import { CartItem } from "@/types";
 
 
-export async function CreateAPost(formData: FormData) {
-  await prisma.posts.create({
-    data: {
-      title: formData.get("title") as string,
-      slug: RemoveSpaceAndReplaceWithHypen(formData.get("title") as string),
-      content: formData.get("content") as string,
-      Author: {
-        connect: {
-          email: "dimssky@gmail.com",
-        },
-      },
-    },
-  });
-
-  revalidatePath("/blog");
-  console.log("Succes Creating a Post!");
-}
-
 export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   const validatedFields = RegisterSchema.safeParse(values);
 
@@ -57,7 +39,7 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   };
 }
 
-export async function SaveToDBCart (items: CartItem[]) { //Belum sempurna masih tahap fixing
+export async function SaveToDBCart (items: CartItem[]) {
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
@@ -77,5 +59,12 @@ export async function SaveToDBCart (items: CartItem[]) { //Belum sempurna masih 
   }catch {
     return {error: 'Failed to Save Cart to Database!', status: false};
   }
+}
+
+export async function SaveWislistToDB (productId: string) {
+
+
+
+
 }
 

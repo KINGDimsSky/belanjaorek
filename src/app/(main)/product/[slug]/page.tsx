@@ -1,5 +1,5 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import DetailedProductComponent from "@/components/sharedComponents/DetailedProducts";
+import DetailedProductComponent from "@/app/(main)/product/[slug]/components/DetailedProducts";
 import { prisma } from "@/lib/db";
 import { FaCheck, FaTruckMoving } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";

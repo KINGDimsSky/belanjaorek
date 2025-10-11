@@ -1,6 +1,5 @@
-import { AudioWaveform, BookOpen, Bot, Command, Frame, GalleryVerticalEnd, PieChart, Settings2, SquareTerminal } from "lucide-react";
 import { CgProfile } from "react-icons/cg";
-import { FaBloggerB, FaQuestion, FaStore } from "react-icons/fa";
+import { FaQuestion, FaStore } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
 import { IoIosHeartHalf } from "react-icons/io";
 import { MdReport } from "react-icons/md";
@@ -13,7 +12,6 @@ export const UserNav = [
 ]
 
 export const pagesNav = [
-    {id: 1, name: 'Blog', icon: FaBloggerB, href: '/blog'},
-    {id: 2, name: 'Marketplace', icon: FaStore, href: '/store'},
-    {id: 3, name: 'About', icon: FaQuestion, href: '/about'}
+    {id: 1, name: 'Marketplace', icon: FaStore, href: '/store'},
+    {id: 2, name: 'About', icon: FaQuestion, href: '/about'}
 ]

@@ -20,7 +20,6 @@ model User {
   password            String?
   role                String     @default("user")
   image               String?    @default("/user.png")
-  Posts               Posts[]
   Product             Product[]
   TwoVerificationStep Boolean    @default(false) @map("2fa")
   Wishlist            Wishlist[]
@@ -31,32 +30,58 @@ model User {
 }
 
 model Product {
-  id            String     @id @default(cuid())
-  name          String
-  slug          String  @unique
-  price         Int
-  image         String?    @default("/NoProduct.jpg")
-  IsDiscount    Boolean    @default(false) @map("isdiscount")
-  Stock         Int
-  DiscountPrice Int?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  Seller        User       @relation(fields: [userId], references: [id])
-  userId        String
-  category      Category   @relation(fields: [categoryId], references: [id])
-  categoryId    String
-  Wishlist      Wishlist[]
-  Cart          Cart[]
+  id                 String               @id @default(cuid())
+  name               String
+  slug               String               @unique
+  price              Int
+  image              String?              @default("/NoProduct.jpg")
+  IsDiscount         Boolean              @default(false) @map("isdiscount")
+  Stock              Int
+  DiscountPrice      Int?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  userId             String
+  categoryId         String
+  Wishlist           Wishlist[]
+  Cart               Cart[]
+  ProductImage       ProductImage[]
+  ProductDescription ProductDescription[]
 
+  category Category @relation(fields: [categoryId], references: [id])
+  Seller   User     @relation(fields: [userId], references: [id])
+
+  @@index([slug])
   @@map("product")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String  @unique
+  name      String
+  productId String
+  Product   Product @relation(fields: [productId], references: [id])
+
+  @@map("product_image")
+}
+
+model ProductDescription {
+  id                String  @id @default(cuid())
+  description       String
+  VerifiedProduct   Boolean @default(false) @map("verifiedproduct")
+  productId         String
+  LatestVersion     String  @default("v1") @map("latestversion")
+  LicensesAgreement String  @default("No Licenses") @map("licensesagreement")
+  Product           Product @relation(fields: [productId], references: [id])
+
+  @@map("product_description")
 }
 
 model Wishlist {
   id        String  @id @default(cuid())
-  user      User    @relation(fields: [userId], references: [id])
   userId    String
-  product   Product @relation(fields: [productId], references: [id])
   productId String
+  product   Product @relation(fields: [productId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 
   @@unique([userId, productId])
   @@map("wishlist")
@@ -64,11 +89,11 @@ model Wishlist {
 
 model Cart {
   id        String  @id @default(cuid())
-  user      User    @relation(fields: [userId], references: [id])
   userId    String
-  product   Product @relation(fields: [productId], references: [id])
   productId String
   quantity  Int     @default(1)
+  user      User    @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
 
   @@unique([userId, productId])
   @@map("cart")
@@ -76,24 +101,10 @@ model Cart {
 
 model Category {
   id      String    @id @default(cuid())
-  title   String    @unique
+  title   String
   slug    String
   Product Product[]
 
+  @@unique([title, slug])
   @@map("category")
-}
-
-model Posts {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  published Boolean  @default(false)
-  slug      String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  Author    User     @relation(fields: [AuthorId], references: [id])
-  AuthorId  String
-
-  @@index([slug])
-  @@map("posts")
 }

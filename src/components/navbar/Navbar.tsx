@@ -38,9 +38,6 @@ export default function Navbar() {
           </div>
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList className="flex gap-2 items-center">
-             <NavigationMenuItem asChild>
-               <Link href={"/blog"} className="font-light tracking-tight hover:text-primary">Blog</Link>
-             </NavigationMenuItem>
              <NavigationMenuItem>
               <Link href={'/samp'} className="font-light tracking-tight hover:text-primary">SAMP</Link>
              </NavigationMenuItem>
