@@ -1,41 +1,26 @@
-import { ProductWithCategory } from "@/types";
-import { toast } from "sonner";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
 
 interface WishlistType {
-    WishlistItem: ProductWithCategory[];
-    ToggleWishlist: (product: ProductWithCategory) => void;
-    RemoveFromWishlist: (productId: string) => void;
-    ClearWishlist : () => void;
+    WhislistProductIds : Set<string>;
+    setInitialWhislist : (productIds: string[]) => void;
+    toggleWhislist : (productId: string) => void;
 }   
 
-export const UseWishListStore = create(persist<WishlistType>((set) => ({
-    WishlistItem: [],
+export const UseWhislistStore = create<WishlistType>((set) => ({
+    WhislistProductIds : new Set(),
 
-    ToggleWishlist: (product) => set((state) => {
-        const ExistingItem = state.WishlistItem.find((item) => item.id === product.id);
+    setInitialWhislist : (productIds) => set({
+        WhislistProductIds: new Set(productIds)
+    }),
 
-        if (ExistingItem) {
-            const UpdatedItem = state.WishlistItem.filter((item) => item.id !== product.id)
-            toast.success('Product Removed From Wishlist!');
-            return {WishlistItem : UpdatedItem};
+    toggleWhislist : (productId) => set((state) => {
+        const newWhislist = new Set(state.WhislistProductIds);
+
+        if (newWhislist.has(productId)) {
+            newWhislist.delete(productId);
         }else {
-            toast.success('Product Added To Wishlist!');
-            return {WishlistItem : [...state.WishlistItem, {...product}]};
+            newWhislist.add(productId);
         }
-    }),
-
-    RemoveFromWishlist: (ProductID) => set((state) => {
-        const UpdatedItem = state.WishlistItem.filter((item) => item.id !== ProductID);
-        toast.success('Product Removed from Wishlist!');
-        return {WishlistItem: UpdatedItem};
-    }),
-
-    ClearWishlist: () => set({
-        WishlistItem : []
+        return {WhislistProductIds : newWhislist};
     })
-}), 
-    { name : 'WishlistItem', }
-))
+}))

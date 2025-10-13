@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { UseWishListStore } from "@/store/wishlist-store";
 import { ProductWithCategory } from "@/types";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,6 +15,7 @@ export default function ProductCard({ product } : {product : ProductWithCategory
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const AddWishlist = UseWishListStore((state) => state.ToggleWishlist);
   const RemoveWishlist = UseWishListStore((state) => state.RemoveFromWishlist);
+  const {data: session, status} = useSession();
 
   const createdDate = new Date(createdAt); 
   const now = new Date();

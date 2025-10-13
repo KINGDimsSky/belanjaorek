@@ -1,8 +1,9 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import DetailedProductComponent from "@/app/(main)/product/[slug]/components/DetailedProducts";
-import { prisma } from "@/lib/db";
 import { FaCheck, FaTruckMoving } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
+import { Suspense } from "react";
+import DetaileedProductLoadingStream from "./components/LoadingStream";
 
 interface DetailedProductsPageProps {
     params: {
@@ -10,25 +11,8 @@ interface DetailedProductsPageProps {
     }
 }
 
-export default async function DetailedProductsPage ({params}: DetailedProductsPageProps) {
+export default function DetailedProductsPage ({params}: DetailedProductsPageProps) {
     const { slug } = params;
-    const product = await prisma.product.findUnique({
-        where : {
-            slug : slug 
-        },
-        include : {
-          category : true,
-          Seller: true
-        },
-    })
-
-    if (!product) {
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <h2>Oops, No Product Founds!</h2>
-        </div>
-      )
-    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -49,7 +33,9 @@ export default async function DetailedProductsPage ({params}: DetailedProductsPa
             </MaxWidthWrapper>
           </div>
           <MaxWidthWrapper className="flex flex-col ">
-            <DetailedProductComponent products={product}/>
+            <Suspense fallback={<DetaileedProductLoadingStream/>}>
+              <DetailedProductComponent slug={slug}/>
+            </Suspense>
           </MaxWidthWrapper>
         </div>
     )

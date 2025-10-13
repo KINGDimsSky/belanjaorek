@@ -1,8 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { prisma } from "./db";
-import { RemoveSpaceAndReplaceWithHypen } from "./utils";
 import * as z from "zod";
 import { RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
@@ -10,6 +8,7 @@ import { GetUserByEmail } from "./services";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import { CartItem } from "@/types";
+import { revalidatePath } from "next/cache";
 
 
 export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
@@ -39,7 +38,7 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   };
 }
 
-export async function SaveToDBCart (items: CartItem[]) {
+export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna tahap Prosess */
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
@@ -61,10 +60,54 @@ export async function SaveToDBCart (items: CartItem[]) {
   }
 }
 
-export async function SaveWislistToDB (productId: string) {
+// Mengambil daftar ID wishlist pengguna saat ini
+export async function getWishlistIdsAction() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) return [];
 
+  const wishlist = await prisma.wishlist.findMany({
+    where: { userId: session.user.id },
+    select: { productId: true },
+  });
 
-
-
+  return wishlist.map(item => item.productId);
 }
+
+// Menambah/menghapus item dari wishlist di database
+export async function toggleWishlistAction(productId: string) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return { error: 'You must be logged in.' };
+  }
+  
+  const userId = session.user.id;
+  const existingWishlistItem = await prisma.wishlist.findUnique({
+    where: {
+      userId_productId: { userId, productId },
+    },
+  });
+
+  try {
+    if (existingWishlistItem) {
+      await prisma.wishlist.delete({
+        where: {
+          id: existingWishlistItem.id 
+      }});
+      revalidatePath('/'); // Revalidasi halaman yang relevan
+      return { success: 'Removed from wishlist.' };
+    } else {
+      await prisma.wishlist.create({
+        data: {
+        userId : userId, 
+        productId : productId
+      }});
+      revalidatePath('/');
+      return { success: 'Added to wishlist.' };
+    }
+  } catch (error) {
+    return { error: 'Something went wrong.' };
+  }
+}
+
 

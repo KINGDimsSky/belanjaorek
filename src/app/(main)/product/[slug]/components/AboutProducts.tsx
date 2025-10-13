@@ -6,11 +6,11 @@ import { SelectContent } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { FaStar } from "react-icons/fa";
 
-export default function DescProductComponent() {
+export default function AboutProductComponent() {
 
 
   return (
-    <div className="flex flex-col mt-4">
+    <div className="flex flex-col mt-4 mb-16">
       <p className="w-full text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/15</p>
       <div className="relative flex gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
@@ -42,7 +42,7 @@ export default function DescProductComponent() {
           <p className="text-sm font-semibold">With 5 Stars</p>
         </div>
         <p className="text-xs tracking-tight font-extralight mt-2">This Assets Has 772 User ratings and 292 User Reviews</p>
-        <p className="mt-6 mb-4 text-sm">Sort By</p>
+        <p className="mt-6 mb-2 font-semibold">Sort By</p>
         <div className="flex w-64 gap-4 mb-8">
           <Select>
             <SelectTrigger className={cn('flex gap-2 rounded-none text-base px-2 py-1')}>
@@ -71,7 +71,7 @@ export default function DescProductComponent() {
             </SelectContent>
           </Select>
         </div>
-        <ClientRating/>
+        <ClientRating/> {/* Nanti Ini Di kasih Props */}
       </div>
     </div>
   );
