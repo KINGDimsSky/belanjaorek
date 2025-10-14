@@ -1,21 +1,24 @@
 'use client'
 
+import { toggleWishlistAction } from "@/lib/actions";
 import { cn } from "@/lib/utils";
-import { UseWishListStore } from "@/store/wishlist-store";
+import { UseWhislistStore } from "@/store/wishlist-store";
 import { ProductWithCategory } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
+import WhislistButton from "../sharedComponents/WhislistButton";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
   const { name, price, image, IsDiscount, category, createdAt, slug, id} = product;
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const AddWishlist = UseWishListStore((state) => state.ToggleWishlist);
-  const RemoveWishlist = UseWishListStore((state) => state.RemoveFromWishlist);
+  const WhislistedItem = UseWhislistStore((state) => state.WhislistProductIds);
+  const ToggleWhislist = UseWhislistStore((state) => state.toggleWhislist);
+  const IsWhislisted = WhislistedItem.has(product.id);
   const {data: session, status} = useSession();
+  const router = useRouter();
 
   const createdDate = new Date(createdAt); 
   const now = new Date();
@@ -23,14 +26,14 @@ export default function ProductCard({ product } : {product : ProductWithCategory
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   const isNew = diffDays <= 14;
 
-  const handleLikeClick = () => {
-    if (isLiked) {
-      RemoveWishlist(id);
-    } else {
-      AddWishlist(product);
+  const HandleButtonClick = (productId : string) => {
+    if (status === 'unauthenticated') {
+     return router.push('/login');
     }
-    setIsLiked(!isLiked);
-  };
+    
+    toggleWishlistAction(productId);
+  }
+
 
   return (
     <div className="relative pb-10 flex flex-col w-64 hover:border hover:border-foreground">
@@ -51,13 +54,7 @@ export default function ProductCard({ product } : {product : ProductWithCategory
           <h2 className="bg-foreground text-background px-2 py-1 tracking-tight font-light">NEW</h2>
         </div>
       )}
-      <div onClick={handleLikeClick} className={cn("absolute top-2 right-3 p-1 rounded-full", isLiked ? "bg-red-500" : "bg-black/50")}>
-        {isLiked ? (
-          <FaHeart className="text-white w-6 h-6 cursor-pointer"/>
-        ) : (
-          <CiHeart className="text-white w-6 h-6 cursor-pointer"/>
-        )}
-      </div>
+      <WhislistButton Isabsolute productId={product.id}/>
     </div>
   );
 }

@@ -5,37 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { UsecartStore } from "@/store/cart-store";
-import { UseWishListStore } from "@/store/wishlist-store";
 import { ProductWithUsersAndCategory } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import { IoShieldSharp } from "react-icons/io5";
 
+import WishlistButton from "@/components/sharedComponents/WhislistButton";
+
 export default function DescProduct({products} : {products : ProductWithUsersAndCategory}) {
     const [amount, setAmount] = useState<number>(1);
     const addToCart = UsecartStore((state) => state.addToCart);
-    const AddWishlist = UseWishListStore((state) => state.);
     const {data: session, status} = useSession();
-    const router = useRouter();
 
-     const DecreaseAmount = () => {
-        if (amount >= 2){
-         setAmount((prevstate) => prevstate -1);
-        } 
-      }
-      
-      const AddToWhislist = (products : ProductWithUsersAndCategory) => {
-        if (status == 'unauthenticated') {
-          return router.push('/login')
-        }
-        AddWishlist(products)
-      }
-
-      useEffect(() => {
+    const DecreaseAmount = () => {
+      if (amount >= 2){
+        setAmount((prevstate) => prevstate -1);
+      } 
+    }
+    
+    useEffect(() => {
         UsecartStore.setState({amount: amount})
       }, [amount])
     
@@ -116,10 +107,7 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
         {status === 'loading' ? (
           <Skeleton className="w-14 px-2 h-9 rounded-md"/>
         ) : (
-          <Button onClick={() => AddToWhislist(products)} className="border border-foreground/50"
-          variant={"ghost"}>
-            <FaHeart className="text-foreground" />
-          </Button>
+          <WishlistButton Isabsolute={false} productId={products.id}/>
         )}
       </div>
       <div className="flex justify-between w-full mt-3 items-center">

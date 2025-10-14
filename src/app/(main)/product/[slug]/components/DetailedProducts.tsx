@@ -1,31 +1,10 @@
 import Image from "next/image";
 import BreadCrumb from "./BreadCrump";
 import AboutProductComponent from "@/app/(main)/product/[slug]/components/AboutProducts";
-import DescProduct from "./DescProduct";
-import { prisma } from "@/lib/db";
-import { getWishlistIdsAction } from "@/lib/actions";
+import DescProduct from "./DescProduct"
+import { ProductWithUsersAndCategory } from "@/types";
 
-export default async function DetailedProductComponent({slug} : {slug : string}) {
-  const InitialWhislistIds = await getWishlistIdsAction();
-  
-  const product = await prisma.product.findUnique({
-        where : {
-            slug : slug 
-        },
-        include : {
-          category : true,
-          Seller: true
-        },
-    })
-
-    if (!product) {
-      return (
-      <div className="flex items-center justify-center min-h-screen">
-        <h2>Oops, No Product Founds!</h2>
-      </div>
-      )
-    }
-
+export default function DetailedProductComponent({product} : {product : ProductWithUsersAndCategory}) {
   return (
     <div className="flex flex-col mt-6">
       <BreadCrumb prodName={product.name} Category={product.category}/>

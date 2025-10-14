@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 import { FaStar } from "react-icons/fa";
 
 export default function AboutProductComponent() {
-
-
   return (
     <div className="flex flex-col mt-4 mb-16">
       <p className="w-full text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/15</p>

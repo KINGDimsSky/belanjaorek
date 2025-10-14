@@ -2,18 +2,13 @@
 
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import { Heart, Menu, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MobileNav from "./MobileNav";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";

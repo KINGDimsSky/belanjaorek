@@ -28,7 +28,7 @@ export default function Home() {
       <div className="mt-24 bg-foreground/5 w-full mb-24 pt-24">
         <MaxWidthWrapper className="flex gap-4 justify-between ">
           <div className="flex flex-col gap-2 w-1/2">
-            <h2 className="text-sm tracking-tight font-semibold">Get The Newest Collection of Assets, Design, SFX, Unity Assets,  Icons & SAMP Assets Digital at Belanjaorek</h2>
+            <h2 className="text-sm tracking-tight font-semibold">Get The Newest Collection of Assets, Design, SFX, Unity Assets, Icons & SAMP Assets Digital at Belanjaorek </h2>
             <p className="text-xs tracking-tight font-light">
               Welcome to the official site of Belanjaorek where you can buy high quality sports
               equipment and accessories. Belanjaorek Official Online Store provides you the best products

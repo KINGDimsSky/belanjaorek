@@ -4,7 +4,7 @@ import { prisma } from "./db";
 import * as z from "zod";
 import { RegisterSchema } from "./schema/auth-schema";
 import bcrypt from "bcryptjs";
-import { GetUserByEmail } from "./services";
+import { getProductsByIds, GetUserByEmail } from "./services";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import { CartItem } from "@/types";
@@ -42,7 +42,7 @@ export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
-    return {error: 'Must Login to Use Cart Features!', status: false};
+    return {message: 'Must Login to Use Cart Features!', status: false};
   }
   const user = session.user.id;
   
@@ -56,11 +56,11 @@ export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna
     })
     return {message: 'Cart Saved to Database!', status: true};
   }catch {
-    return {error: 'Failed to Save Cart to Database!', status: false};
+    return {message: 'Failed to Save Cart to Database!', status: false};
   }
 }
 
-// Mengambil daftar ID wishlist pengguna saat ini
+
 export async function getWishlistIdsAction() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return [];
@@ -68,17 +68,22 @@ export async function getWishlistIdsAction() {
   const wishlist = await prisma.wishlist.findMany({
     where: { userId: session.user.id },
     select: { productId: true },
+
   });
 
   return wishlist.map(item => item.productId);
 }
 
-// Menambah/menghapus item dari wishlist di database
+export async function getWhislistProductsAction (productIds : string[]) {
+  const products = await getProductsByIds(productIds);
+  return products
+}
+
 export async function toggleWishlistAction(productId: string) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
-    return { error: 'You must be logged in.' };
+    return { message: 'Error You Must Logged In!', status: false };
   }
   
   const userId = session.user.id;
@@ -94,19 +99,19 @@ export async function toggleWishlistAction(productId: string) {
         where: {
           id: existingWishlistItem.id 
       }});
-      revalidatePath('/'); // Revalidasi halaman yang relevan
-      return { success: 'Removed from wishlist.' };
+      revalidatePath('/product/'); 
+      return { message: 'Product Successfully Removed From Whislist!', status: true};
     } else {
       await prisma.wishlist.create({
         data: {
         userId : userId, 
         productId : productId
       }});
-      revalidatePath('/');
-      return { success: 'Added to wishlist.' };
+      revalidatePath('/product/');
+      return { message : 'Added to wishlist.', status: true };
     }
   } catch (error) {
-    return { error: 'Something went wrong.' };
+    return { message : 'Something went wrong.', status: false };
   }
 }
 
