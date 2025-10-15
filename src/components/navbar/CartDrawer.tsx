@@ -10,7 +10,6 @@ import { UsecartStore } from "@/store/cart-store";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { SaveCartToDB } from "@/lib/actions";
 
-
 interface DrawerProps {
   state: boolean;
   setState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +30,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
           <IoMdClose onClick={() => setState(!state)} className="text-lg cursor-pointer" />
         </div>
         {CartItems.length === 0 ? (
-          <div className="flex flex-col gap-6 my-auto items-center">
+          <div className="flex flex-col gap-4 tracking-tight my-auto items-center">
             <h2 className="text-sm tracking-tight font-semibold">Oops No Product Found Here!</h2>
             <Image src={'/no-orders.png'} alt="Empty Cart" width={150} height={150} className="object-cover"/>
           </div>
@@ -54,15 +53,15 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
             ))}
           </div>
         )}
-        <div className="items-end mt-auto text-foreground">
-          {CartItems.length ? ( /* Nanti Save TO DB Nya di refactor */
+          {CartItems.length ? (
+             <div className="items-end mt-auto text-foreground"> 
             <Button onClick={() => SaveCartToDB(CartItems)} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
                Checkout
             </Button>
+            </div>
           ) : (
             null
           )}
-        </div>
       </div>
     </div>
   );

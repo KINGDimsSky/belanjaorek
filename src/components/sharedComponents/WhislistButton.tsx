@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { Spinner } from '../ui/spinner';
 
 export default function WhislistButton({ productId, Isabsolute }: { productId: string , Isabsolute : boolean}) {
   const [isPending, startTransition] = useTransition();
@@ -45,7 +46,9 @@ export default function WhislistButton({ productId, Isabsolute }: { productId: s
         </div>
     ) : (
       <Button variant={'ghost'} onClick={handleToggle} disabled={isPending} className={cn('border border-foreground/50', isWishlisted ? "bg-pink-500" : "")}>
-        {isWishlisted ? <FaHeart className="text-white"/> : <CiHeart />}
+        { isPending ? (
+          <Spinner className='size-3'/>
+        ) : isWishlisted ? <FaHeart className="text-white"/> : <CiHeart />}
       </Button>
     )}
     </Fragment>

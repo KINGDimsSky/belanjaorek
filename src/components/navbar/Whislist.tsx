@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { getWhislistProductsAction, toggleWishlistAction } from "@/lib/actions";
 import { toast } from "sonner";
 import { ProductWithCategory } from "@/types";
+import { Spinner } from "../ui/spinner";
 
 interface WhislistProps {
     state : boolean;
@@ -19,32 +20,36 @@ interface WhislistProps {
 
 export default function Whislist ({state , setState} : WhislistProps) {
     const WhislistIds = UseWhislistStore((state) => state.WhislistProductIds); 
+    const WhislistClient = UseWhislistStore((state) => state.toggleWhislist);
     const [products, setProducts] = useState<ProductWithCategory[]>([]);
-    const [isPending, startTransition] = useTransition();
+    const [isFetching , startTransition] = useTransition();
+    const [isToggling, startToggleTransition] = useTransition();
     const ref = useRef(null);
     useBodyScrollLock(state);
     useOnClickOutside(ref, () => setState(!state));
 
     useEffect(() => {
       const Ids = Array.from(WhislistIds);
-
-      startTransition(() => {
-        getWhislistProductsAction(Ids).then(setProducts);
+      startTransition(async () => {
+        const result = await getWhislistProductsAction(Ids);
+        setProducts(result)
       })
-      
     }, [WhislistIds])
 
+    const HandleToggleWhislist = (productId : string) => {
+      WhislistClient(productId);
 
-    const HandleToggleWhislist = async (productId : string) => {
-      const result = await toggleWishlistAction(productId);
+      startToggleTransition(async () => {
+        const result = await toggleWishlistAction(productId);
+        
+        if (result.status === false) {
+          WhislistClient(productId);
+          toast.error(result.message)
+        }
 
-      if (result.status === false) {
-       return toast.error(result.message);
-      }
-
-      toast.success(result.message);
+        toast.success(result.message);
+      })      
     }
-
 
     return (
         <div className="fixed flex z-10 top-0 justify-end min-h-screen w-full bg-background/65">
@@ -53,10 +58,14 @@ export default function Whislist ({state , setState} : WhislistProps) {
               <h2 className="font-semibold">Wishlist ({products.length || '0'})</h2>
               <IoMdClose onClick={() => setState(!state)}  className="text-lg cursor-pointer" />
             </div>
-            {products.length === 0 ? (
+            {isFetching ? (
+              <div className="flex w-full h-full items-center justify-center">
+                <Spinner className="size-12"/>
+              </div>
+            ):products.length === 0 ? (
               <div className="flex flex-col gap-4 tracking-tight my-auto items-center">
                 <h2 className="text-sm font-semibold">Oops No Product Found Here!</h2>
-                <Image src={'/no-orders.png'} alt="Empty Cart" width={150} height={150} className="object-cover"/>
+                <Image src={'/wishlist.png'} alt="Empty Cart" width={150} height={150} className="object-cover"/>
               </div>
             ) : (
               <div className="flex flex-col gap-2 mt-2">
