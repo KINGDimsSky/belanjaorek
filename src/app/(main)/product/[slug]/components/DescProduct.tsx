@@ -18,6 +18,8 @@ import WishlistButton from "@/components/sharedComponents/WhislistButton";
 export default function DescProduct({products} : {products : ProductWithUsersAndCategory}) {
     const [amount, setAmount] = useState<number>(1);
     const addToCart = UsecartStore((state) => state.addToCart);
+    const defaultCartState = UsecartStore((state) => state.cartItems);
+    const HasProduct = defaultCartState.find((item) => item.id === products.id);
     const {data: session, status} = useSession();
 
     const DecreaseAmount = () => {
@@ -100,10 +102,18 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
         </AccordionItem>
       </Accordion>
       <div className="flex gap-4 mt-4">
-        <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full"
+        {HasProduct ? (
+          <Button className="flex items-center font-semibold text-white w-full"
+          variant={"default"}>
+          View In Cart
+        </Button>
+        ) : (
+          <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full"
           variant={"default"}>
           Add to Cart
         </Button>
+        )}
+        
         {status === 'loading' ? (
           <Skeleton className="w-14 px-2 h-9 rounded-md"/>
         ) : (

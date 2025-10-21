@@ -47,13 +47,15 @@ export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna
   const user = session.user.id;
   
   try {
-    await prisma.cart.create({
-      data : {
-        userId: user,
-        productId: items[0].id,
-        quantity: items[0].quantity
-      }
-    })
+    if (items.length >= 0) {
+      await prisma.cart.createMany({
+        data : items.map((item) => ({
+          userId : user,
+          productId : item.id,
+          quantity : item.quantity
+        }))
+      })
+    }
     return {message: 'Cart Saved to Database!', status: true};
   }catch {
     return {message: 'Failed to Save Cart to Database!', status: false};
@@ -99,7 +101,8 @@ export async function toggleWishlistAction(productId: string) {
         where: {
           id: existingWishlistItem.id 
       }});
-      revalidatePath('/product/'); 
+      revalidatePath('/products'); 
+      revalidatePath('/');
       return { message: 'Product Successfully Removed From Whislist!', status: true};
     } else {
       await prisma.wishlist.create({
@@ -107,7 +110,8 @@ export async function toggleWishlistAction(productId: string) {
         userId : userId, 
         productId : productId
       }});
-      revalidatePath('/product/');
+      revalidatePath('/products');
+      revalidatePath('/');
       return { message : 'Added to wishlist.', status: true };
     }
   } catch (error) {

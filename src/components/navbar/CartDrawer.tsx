@@ -9,6 +9,8 @@ import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { SaveCartToDB } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface DrawerProps {
   state: boolean;
@@ -21,6 +23,17 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
   const ref = useRef<HTMLDivElement>(null);
   useBodyScrollLock(state);
   useOnClickOutside(ref, () => setState(false));
+  const router = useRouter();
+
+  const HandleClickingCheckout = async () => {
+    const SaveToDB = await SaveCartToDB(CartItems);
+
+    if (SaveToDB.status === false) {
+      return toast.error(SaveToDB.message);
+    }
+    
+    router.push('/checkout');
+  }
 
   return (
     <div className="fixed flex z-10 top-0 justify-end min-h-screen w-full bg-background/65">
@@ -55,7 +68,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
         )}
           {CartItems.length ? (
              <div className="items-end mt-auto text-foreground"> 
-            <Button onClick={() => SaveCartToDB(CartItems)} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
+            <Button onClick={HandleClickingCheckout} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
                Checkout
             </Button>
             </div>
