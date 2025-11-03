@@ -16,11 +16,15 @@ import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 import CartDrawer from "./CartDrawer";
 import Whislist from "./Whislist";
+import { UseGlobalNavigationState } from "@/store/global-navigation-state";
 
 export default function Navbar() {
-  const [clicked, SetClicked] = useState<boolean>(false);
-  const [drawer, SetDrawer] = useState<boolean>(false);
-  const [whislist, SetWhislist] = useState<boolean>(false);
+  const NavigationState = UseGlobalNavigationState(state => state.navigationBarState);
+  const NavigationToggle = UseGlobalNavigationState(state => state.ToggleNavigation);
+  const CartState = UseGlobalNavigationState(state => state.CartState)
+  const CartDrawerToggle = UseGlobalNavigationState(state => state.ToggleCartState);
+  const WhislistState = UseGlobalNavigationState(state => state.whislistState);
+  const WhislistToggle = UseGlobalNavigationState(state => state.ToggleWhislistState);
   const {data: session, status} = useSession();
 
   return (
@@ -56,7 +60,7 @@ export default function Navbar() {
               <Button onClick={() => signIn()} size={'sm'} className="text-foreground">Sign In</Button>
             </div>
           ) : (
-          <div onClick={() => SetClicked(!clicked)} className="flex gap-2 items-center cursor-pointer">
+          <div onClick={() => NavigationToggle()} className="flex gap-2 items-center cursor-pointer">
             <h2>{session?.user?.name}</h2>
              <div className="relative w-9 h-9 rounded-full bg-green-600 overflow-hidden object-cover">
                <Image src={session?.user.image || ''} alt="User Profile" width={200} height={200}/>
@@ -64,28 +68,28 @@ export default function Navbar() {
           </div>
           ))}
           <div className="flex gap-4">
-            <ShoppingCart onClick={() => SetDrawer(!drawer)} className="hover:text-primary cursor-pointer"/>
-            <Heart onClick={() => SetWhislist(!whislist)} className="hover:text-primary cursor-pointer"/>
+            <ShoppingCart onClick={() => CartDrawerToggle()} className="hover:text-primary cursor-pointer"/>
+            <Heart onClick={() => WhislistToggle()} className="hover:text-primary cursor-pointer"/>
           </div>        
         </div>
         <div className="flex gap-4 lg:hidden">
-          <ShoppingCart onClick={() => SetDrawer(!drawer)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
-          <Heart onClick={() => SetWhislist(!whislist)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
-          <Menu onClick={() => SetClicked(!clicked)} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <ShoppingCart onClick={() => CartDrawerToggle()} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <Heart onClick={() => WhislistToggle()} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
+          <Menu onClick={() => NavigationToggle()} className="cursor-pointer hover:text-primary duration-150 transition-all"/>
         </div>
       </MaxWidthWrapper>
-      {clicked ? (
-        <MobileNav state={clicked} setState={SetClicked}/>
+      {NavigationState ? (
+        <MobileNav state={NavigationState} setState={NavigationToggle}/>
       ) : (
         null
       )}
-      {drawer ? (
-        <CartDrawer state={drawer} setState={SetDrawer}/>
+      {CartState ? (
+        <CartDrawer state={CartState} setState={CartDrawerToggle}/>
       ) : (
         null
       )}
-      {whislist ? (
-        <Whislist state={whislist} setState={SetWhislist}/>
+      {WhislistState ? (
+        <Whislist state={WhislistState} setState={WhislistToggle}/>
       ) : (
         null
       )}

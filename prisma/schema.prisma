@@ -99,13 +99,16 @@ model Cart {
   @@map("cart")
 }
 
-//model CartItems 
+model CartItems {
+  id     String @id @default(cuid())
+  userId String
+  CartId String
+}
 
 //model Order 
 //model OrderItem 
 
 //model Log_Transaction
-
 
 model Category {
   id      String    @id @default(cuid())

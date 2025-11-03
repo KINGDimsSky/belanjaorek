@@ -12,11 +12,12 @@ import { useEffect, useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import { IoShieldSharp } from "react-icons/io5";
-
 import WishlistButton from "@/components/sharedComponents/WhislistButton";
+import { UseGlobalNavigationState } from "@/store/global-navigation-state";
 
 export default function DescProduct({products} : {products : ProductWithUsersAndCategory}) {
     const [amount, setAmount] = useState<number>(1);
+    const CartDrawerToggle = UseGlobalNavigationState(state => state.ToggleCartState);
     const addToCart = UsecartStore((state) => state.addToCart);
     const defaultCartState = UsecartStore((state) => state.cartItems);
     const HasProduct = defaultCartState.find((item) => item.id === products.id);
@@ -102,18 +103,21 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
         </AccordionItem>
       </Accordion>
       <div className="flex gap-4 mt-4">
-        {HasProduct ? (
-          <Button className="flex items-center font-semibold text-white w-full"
+        {status === 'loading' ? (
+          <Skeleton className="w-full px-2 h-9 rounded-md"/>
+        ) : (
+          HasProduct ? (
+          <Button onClick={() => CartDrawerToggle()} className="flex items-center font-semibold text-white w-full"
           variant={"default"}>
-          View In Cart
-        </Button>
+            View In Cart
+          </Button>
         ) : (
           <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full"
           variant={"default"}>
           Add to Cart
-        </Button>
+          </Button>
+        )
         )}
-        
         {status === 'loading' ? (
           <Skeleton className="w-14 px-2 h-9 rounded-md"/>
         ) : (
