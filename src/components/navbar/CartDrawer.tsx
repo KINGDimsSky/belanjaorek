@@ -3,7 +3,7 @@
 import { useBodyScrollLock } from "@/hooks/use-body-scroll";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
@@ -19,20 +19,23 @@ interface DrawerProps {
 
 export default function CartDrawer({ state, setState }: DrawerProps) {
   const CartItems = UsecartStore((state) => state.cartItems);
-  const DeleteItem = UsecartStore((state) => state.removeFromCart)
+  const DeleteItem = UsecartStore((state) => state.removeFromCart);
+  const [IsPending, startTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   useBodyScrollLock(state);
   useOnClickOutside(ref, () => setState(false));
   const router = useRouter();
 
-  const HandleClickingCheckout = async () => {
-    const SaveToDB = await SaveCartToDB(CartItems);
+  const HandleClickingCheckout = () => {
+    startTransition(async () => {
+      const SaveToDB = await SaveCartToDB(CartItems);
 
-    if (SaveToDB.status === false) {
-      return toast.error(SaveToDB.message);
-    }
-    
-    router.push('/checkout');
+      if (SaveToDB.status === false) {
+        toast.error(SaveToDB.message);
+      }else {
+        router.push('/checkout');
+      }
+    })
   }
 
   return (
@@ -68,8 +71,8 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
         )}
           {CartItems.length ? (
              <div className="items-end mt-auto text-foreground"> 
-            <Button onClick={HandleClickingCheckout} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
-               Checkout
+            <Button onClick={HandleClickingCheckout} disabled={IsPending} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
+              {IsPending ? "Saving..." : "Checkout"}
             </Button>
             </div>
           ) : (

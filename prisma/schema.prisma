@@ -43,12 +43,11 @@ model Product {
   userId             String
   categoryId         String
   Wishlist           Wishlist[]
-  Cart               Cart[]
   ProductImage       ProductImage[]
   ProductDescription ProductDescription[]
-
-  category Category @relation(fields: [categoryId], references: [id])
-  Seller   User     @relation(fields: [userId], references: [id])
+  CartItems          CartItems[]
+  category           Category             @relation(fields: [categoryId], references: [id])
+  Seller             User                 @relation(fields: [userId], references: [id])
 
   @@index([slug])
   @@map("product")
@@ -88,21 +87,26 @@ model Wishlist {
 }
 
 model Cart {
-  id        String  @id @default(cuid())
+  id        String      @id @default(cuid())
   userId    String
-  productId String
-  quantity  Int     @default(1)
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
+  CartItems CartItems[]
 
-  @@unique([userId, productId])
+  @@unique([userId])
   @@map("cart")
 }
 
 model CartItems {
-  id     String @id @default(cuid())
-  userId String
-  CartId String
+  id        String @id @default(cuid())
+  CartId    String
+  productId String
+  Quantity  Int    @default(1)
+
+  Cart    Cart    @relation(fields: [CartId], references: [id])
+  Product Product @relation(fields: [productId], references: [id])
+
+  @@unique([productId, CartId])
+  @@map("cart_items")
 }
 
 //model Order 

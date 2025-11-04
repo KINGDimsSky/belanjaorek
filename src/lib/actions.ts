@@ -38,7 +38,7 @@ export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   };
 }
 
-export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna tahap Prosess */
+export async function SaveCartToDB (items: CartItem[]) {
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
@@ -47,17 +47,36 @@ export async function SaveCartToDB (items: CartItem[]) { /* Masih Belum sempurna
   const user = session.user.id;
   
   try {
-    if (items.length >= 0) {
-      await prisma.cart.createMany({
-        data : items.map((item) => ({
-          userId : user,
-          productId : item.id,
-          quantity : item.quantity
-        }))
+    const result = await prisma.$transaction(async (tx) => {
+      const cart = await tx.cart.upsert({
+        where : {
+          userId: user
+        },
+        update : {},
+        create : {
+          userId : user
+        },
       })
-    }
+
+      await tx.cartItems.deleteMany({
+        where : {
+          CartId : cart.id
+        }
+      })
+
+      if (items.length >= 0) {
+        await tx.cartItems.createMany({
+          data : items.map((item) => (
+            {CartId : cart.id, productId : item.id, Quantity: item.quantity}
+          )),
+        });
+      }
+
+      return cart;
+    });
     return {message: 'Cart Saved to Database!', status: true};
-  }catch {
+  }catch(error) {
+    console.error("Failed to save cart:", error);
     return {message: 'Failed to Save Cart to Database!', status: false};
   }
 }
