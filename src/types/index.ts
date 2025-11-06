@@ -1,4 +1,4 @@
-import type { Product, Category, User } from "@prisma/client";
+import type { Product, Category, User, ProductImage } from "@prisma/client";
 
 export type ProductWithCategory = Product & {
   category: Category;
@@ -11,5 +11,11 @@ export type ProductWithUsersAndCategory = Product & {
 
 export interface CartItem extends Product { 
     quantity: number;
+}
+
+export type ProductWithUsersCategoryandImages = Product & {
+  Seller : User;
+  category: Category;
+  ProductImage : ProductImage[];
 }
 

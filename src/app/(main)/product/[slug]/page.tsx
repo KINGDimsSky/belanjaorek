@@ -18,7 +18,8 @@ export default async function DetailedProductsPage ({params}: DetailedProductsPa
       },
       include : {
         category : true,
-        Seller: true
+        Seller: true,
+        ProductImage: true,
       },
     })
     

@@ -31,7 +31,7 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
     
     useEffect(() => {
         UsecartStore.setState({amount: amount})
-      }, [amount])
+    }, [amount])
     
   return (
     <div className="flex flex-col">

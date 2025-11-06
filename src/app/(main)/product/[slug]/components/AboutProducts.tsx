@@ -4,24 +4,53 @@ import ClientRating from "@/app/(main)/product/[slug]/components/ClientRating";
 import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";  
 import { cn } from "@/lib/utils";
+import { ProductWithUsersCategoryandImages } from "@/types";
+import { useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { GrFormPrevious } from "react-icons/gr";
+import { MdNavigateNext } from "react-icons/md";
 
-export default function AboutProductComponent() {
+export default function AboutProductComponent({products} : {products : ProductWithUsersCategoryandImages}) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai productts nya
+
+  const nextSlide = () => {
+    if (currentIndex < items.length - 1) {
+      setCurrentIndex(prev => prev + 1)
+    }
+  }
+
+  const prevSlide = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1)
+    }
+  }
+
   return (
     <div className="flex flex-col mt-4 mb-16">
-      <p className="w-full text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/15</p>
-      <div className="relative flex gap-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <div className="relative w-20 h-20 bg-yellow-200" key={index}>
-            <h2>Image</h2>
-          </div>
-        ))}
-        <div className="absolute text-2xl right-0 top-5 py-1 px-2 cursor-pointer bg-black">
-          <h2>{">"}</h2>
+      <p className=" text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/15</p>     
+      <div className="relative overflow-hidden">
+        <div className="flex gap-4 transition-transform duration-500 ease-in-out" style={{transform: `translateX(-${currentIndex * 25}%)`,}}>
+          {items.map((item, idx) => ( /* Inii masih beelum sempurna nantii diigantiii items beneran dan carousel nya diganti gambar sesuai produknya */
+            <div className="relative w-20 h-20 bg-yellow-200" key={idx}>
+              <h2>Image</h2>
+            </div>
+          ))}
         </div>
-        <div className="absolute text-2xl left-0 top-5 py-1 px-2 cursor-pointer bg-black">
-          <h2>{"<"}</h2>
-        </div>
+        {currentIndex >= 1 ? (
+          <button onClick={prevSlide} className="absolute left-2 top-1/2 -translate-y-1/2 bg-foreground text-background border border-background hover:bg-background hover:text-foreground p-1">
+            <GrFormPrevious className="w-8 h-8"/>
+          </button>
+        ) : (
+          null
+        )} 
+        {currentIndex == items.length - 4 ? (
+          null
+        ) : (
+          <button onClick={nextSlide} className="absolute right-2 top-1/2 -translate-y-1/2 bg-foreground text-background border border-background hover:bg-background hover:text-foreground p-1">
+             <MdNavigateNext className="w-8 h-8"/>
+           </button>
+           )}
       </div>
       <div className="border-t border-foreground/15 mt-4 w-full"></div>
       <div className="mt-3 text-sm">

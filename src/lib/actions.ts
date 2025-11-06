@@ -47,7 +47,7 @@ export async function SaveCartToDB (items: CartItem[]) {
   const user = session.user.id;
   
   try {
-    const result = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       const cart = await tx.cart.upsert({
         where : {
           userId: user
@@ -80,6 +80,8 @@ export async function SaveCartToDB (items: CartItem[]) {
     return {message: 'Failed to Save Cart to Database!', status: false};
   }
 }
+
+
 
 
 export async function getWishlistIdsAction() {
