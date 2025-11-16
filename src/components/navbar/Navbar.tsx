@@ -8,7 +8,6 @@ import {
 import Link from "next/link";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import { Heart, Menu, ShoppingCart } from "lucide-react";
-import { useState } from "react";
 import MobileNav from "./MobileNav";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
@@ -36,15 +35,15 @@ export default function Navbar() {
             <Link href={"/"} className="text-3xl font-bold tracking-tighter">Belanjaorek</Link>
           </div>
           <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList className="flex gap-2 items-center">
+            <NavigationMenuList className="flex gap-2 items-center text-sm">
              <NavigationMenuItem>
-              <Link href={'/samp'} className="font-light tracking-tight hover:text-primary">SAMP</Link>
+              <Link href={'/products'} className="font-light tracking-tight hover:text-primary">Products</Link>
              </NavigationMenuItem>
              <NavigationMenuItem asChild>
                 <Link href={'/about'} className="font-light tracking-tight hover:text-primary">About</Link>
              </NavigationMenuItem>
              <NavigationMenuItem asChild>
-                <Link href={'/store'} className="font-light tracking-tight hover:text-primary">Marketplace</Link>
+                <Link href={'/dashboard'} className="font-light tracking-tight hover:text-primary">Dashboard</Link>
              </NavigationMenuItem>
            </NavigationMenuList>
          </NavigationMenu>

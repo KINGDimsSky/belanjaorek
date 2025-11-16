@@ -1,6 +1,6 @@
 'use client'
 
-import ClientRating from "@/app/(main)/product/[slug]/components/ClientRating";
+import ClientRating from "@/components/products/ClientRating";
 import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";  
 import { cn } from "@/lib/utils";
@@ -11,7 +11,8 @@ import { GrFormPrevious } from "react-icons/gr";
 import { MdNavigateNext } from "react-icons/md";
 
 export default function AboutProductComponent({products} : {products : ProductWithUsersCategoryandImages}) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [clicked, SetClicked] = useState<boolean>(false);
   const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai productts nya
 
   const nextSlide = () => {
@@ -32,7 +33,7 @@ export default function AboutProductComponent({products} : {products : ProductWi
       <div className="relative overflow-hidden">
         <div className="flex gap-4 transition-transform duration-500 ease-in-out" style={{transform: `translateX(-${currentIndex * 25}%)`,}}>
           {items.map((item, idx) => ( /* Inii masih beelum sempurna nantii diigantiii items beneran dan carousel nya diganti gambar sesuai produknya */
-            <div className="relative w-20 h-20 bg-yellow-200" key={idx}>
+            <div onClick={() => SetClicked(!clicked)} className="relative w-20 h-20 bg-yellow-200" key={idx}>
               <h2>Image</h2>
             </div>
           ))}
@@ -44,7 +45,7 @@ export default function AboutProductComponent({products} : {products : ProductWi
         ) : (
           null
         )} 
-        {currentIndex == items.length - 4 ? (
+        {currentIndex == items.length - 5 ? (
           null
         ) : (
           <button onClick={nextSlide} className="absolute right-2 top-1/2 -translate-y-1/2 bg-foreground text-background border border-background hover:bg-background hover:text-foreground p-1">
