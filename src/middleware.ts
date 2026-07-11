@@ -10,7 +10,7 @@ export default async function Middleware (request: NextRequest) {
     secret: process.env.AUTH_SECRET,
    })
    
-   const authResponse = checkAuthentication(token, pathname);
+   const authResponse = checkAuthentication(token, pathname, request.url);
     
    if (authResponse.status !== 200) {
     return authResponse;
