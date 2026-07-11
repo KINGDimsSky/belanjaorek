@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,12 +14,12 @@ model User {
   password            String?
   role                String     @default("user")
   image               String?    @default("/user.png")
-  Product             Product[]
   TwoVerificationStep Boolean    @default(false) @map("2fa")
+  Cart                Cart?
+  Product             Product[]
   Wishlist            Wishlist[]
-  Cart                Cart[]
 
-  @@index(email)
+  @@index([email])
   @@map("users")
 }
 
@@ -42,12 +36,12 @@ model Product {
   updatedAt          DateTime             @updatedAt
   userId             String
   categoryId         String
-  Wishlist           Wishlist[]
-  ProductImage       ProductImage[]
-  ProductDescription ProductDescription[]
   CartItems          CartItems[]
   category           Category             @relation(fields: [categoryId], references: [id])
   Seller             User                 @relation(fields: [userId], references: [id])
+  ProductDescription ProductDescription[]
+  ProductImage       ProductImage[]
+  Wishlist           Wishlist[]
 
   @@index([slug])
   @@map("product")
@@ -88,31 +82,24 @@ model Wishlist {
 
 model Cart {
   id        String      @id @default(cuid())
-  userId    String
+  userId    String      @unique
   user      User        @relation(fields: [userId], references: [id])
   CartItems CartItems[]
 
-  @@unique([userId])
   @@map("cart")
 }
 
 model CartItems {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   CartId    String
   productId String
-  Quantity  Int    @default(1)
-
-  Cart    Cart    @relation(fields: [CartId], references: [id])
-  Product Product @relation(fields: [productId], references: [id])
+  Quantity  Int     @default(1)
+  Cart      Cart    @relation(fields: [CartId], references: [id])
+  Product   Product @relation(fields: [productId], references: [id])
 
   @@unique([productId, CartId])
   @@map("cart_items")
 }
-
-//model Order 
-//model OrderItem 
-
-//model Log_Transaction
 
 model Category {
   id      String    @id @default(cuid())

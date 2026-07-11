@@ -10,7 +10,6 @@ import { authOptions } from "./auth";
 import { CartItem } from "@/types";
 import { revalidatePath } from "next/cache";
 
-
 export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
   const validatedFields = RegisterSchema.safeParse(values);
 
@@ -81,9 +80,6 @@ export async function SaveCartToDB (items: CartItem[]) {
   }
 }
 
-
-
-
 export async function getWishlistIdsAction() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return [];
@@ -91,7 +87,6 @@ export async function getWishlistIdsAction() {
   const wishlist = await prisma.wishlist.findMany({
     where: { userId: session.user.id },
     select: { productId: true },
-
   });
 
   return wishlist.map(item => item.productId);

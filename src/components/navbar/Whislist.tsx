@@ -1,7 +1,7 @@
 'use client'
 
-import { useBodyScrollLock } from "@/hooks/use-body-scroll";
-import { useOnClickOutside } from "@/hooks/use-click-outside";
+import { useBodyScrollLock } from "@/hooks/others/use-body-scroll";
+import { useOnClickOutside } from "@/hooks/others/use-click-outside";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { UseWhislistStore } from "@/store/wishlist-store";
 import Image from "next/image";
@@ -32,7 +32,7 @@ export default function Whislist ({state , setState} : WhislistProps) {
       const Ids = Array.from(WhislistIds);
       startTransition(async () => {
         const result = await getWhislistProductsAction(Ids);
-        setProducts(result)
+        setProducts(result);
       })
     }, [WhislistIds])
 

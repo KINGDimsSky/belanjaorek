@@ -10,8 +10,8 @@ import { useTheme } from "next-themes";
 import { UserNav, pagesNav } from "@/lib/const/sidebar";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useOnClickOutside } from "@/hooks/use-click-outside";
-import { useBodyScrollLock } from "@/hooks/use-body-scroll";
+import { useOnClickOutside } from "@/hooks/others/use-click-outside";
+import { useBodyScrollLock } from "@/hooks/others/use-body-scroll";
 import { Button } from "../ui/button";
 
 export default function MobileNav ({state, setState} : {state : boolean, setState : React.Dispatch<React.SetStateAction<boolean>>}) {

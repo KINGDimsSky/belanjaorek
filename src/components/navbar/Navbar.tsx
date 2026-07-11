@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import CartDrawer from "./CartDrawer";
 import Whislist from "./Whislist";
 import { UseGlobalNavigationState } from "@/store/global-navigation-state";
+import { UseWhislistStore } from "@/store/wishlist-store";
 
 export default function Navbar() {
   const NavigationState = UseGlobalNavigationState(state => state.navigationBarState);
@@ -25,6 +26,9 @@ export default function Navbar() {
   const WhislistState = UseGlobalNavigationState(state => state.whislistState);
   const WhislistToggle = UseGlobalNavigationState(state => state.ToggleWhislistState);
   const {data: session, status} = useSession();
+
+  const WhislistIds = UseWhislistStore((state) => state.WhislistProductIds);
+  const TotalWhistlistItems = Array.from(WhislistIds).length;
 
   return (
     <div className="w-full justify-between items-center">
@@ -48,6 +52,7 @@ export default function Navbar() {
            </NavigationMenuList>
          </NavigationMenu>
         </div>
+
         <div className="hidden lg:flex items-center gap-4">
           {status === 'loading' ? (
             <div className="flex gap-2 items-center">
@@ -68,7 +73,16 @@ export default function Navbar() {
           ))}
           <div className="flex gap-4">
             <ShoppingCart onClick={() => CartDrawerToggle()} className="hover:text-primary cursor-pointer"/>
-            <Heart onClick={() => WhislistToggle()} className="hover:text-primary cursor-pointer"/>
+            {TotalWhistlistItems ? (
+             <div className="flex "> 
+               <div className="relative -mr-3 top-2 left-5 text-center rounded-full w-4 h-4 text-xs bg-pink-500">
+                 <h2>1</h2>
+               </div>
+               <Heart onClick={() => WhislistToggle()} className="hover:text-primary cursor-pointer"/>
+             </div>
+            ) : (
+              <Heart onClick={() => WhislistToggle()} className="hover:text-primary cursor-pointer"/>
+            )}
           </div>        
         </div>
         <div className="flex gap-4 lg:hidden">
