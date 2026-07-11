@@ -1,4 +1,4 @@
-import { prisma } from "./db";
+import { prisma } from "../lib/db";
 import bcrypt from "bcryptjs";
 
 export async function UserLoginValidate(email : string, password : string) {
@@ -16,6 +16,20 @@ export async function UserLoginValidate(email : string, password : string) {
   return IsExisting;
 }
 
+export async function createAnewUser(data : {
+  email : string,
+  password : string,
+  username : string
+}){
+  await prisma.user.create({
+    data: {
+      email: data.email,
+      password: await bcrypt.hash(data.password, 10),
+      username: data.username
+    }
+  })
+}
+
 export async function GetUserByEmail(email: string) {
   const IsFound = await prisma.user.findUnique({
     where: {
@@ -28,28 +42,18 @@ export async function GetUserByEmail(email: string) {
   return IsFound
 }
 
-export async function GoogleLogin(data : {
+export async function createGoogleUser(data : {
   email : string,
   username?: string | null,
   image?: string | null,
 }) {
-  const existingUser = await GetUserByEmail(data.email);
-
-  if (existingUser) {
-    console.log("Google user found in DB:", data.email);
-    return existingUser;
-  }
-
-  console.log("Google user not found, creating new user:", data.email);
-  const newUser = await prisma.user.create({
+  return await prisma.user.create({
     data: {
       email: data.email,
       username: data.username || data.email.split('@')[0],
       image: data.image,
     },
   });
-
-  return newUser;
 }
 
 export async function getProductsByIds (productIds: string[]) {

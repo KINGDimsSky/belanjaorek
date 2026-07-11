@@ -1,41 +1,11 @@
 "use server";
 
 import { prisma } from "./db";
-import * as z from "zod";
-import { RegisterSchema } from "./schema/auth-schema";
-import bcrypt from "bcryptjs";
-import { getProductsByIds, GetUserByEmail } from "./services";
+import { getProductsByIds } from "../services/auth";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import { CartItem } from "@/types";
 import { revalidatePath } from "next/cache";
-
-export async function RegisterUser(values: z.infer<typeof RegisterSchema>) {
-  const validatedFields = RegisterSchema.safeParse(values);
-
-  if (!validatedFields.success) {
-    return { message: `Wrong Fields!`, status: false };
-  }
-
-  const ExistingUser = await GetUserByEmail(values.email)
-
-  if (ExistingUser) {
-    return { message: "Email Already Registered!", status: false };
-  }
-
-  await prisma.user.create({
-    data: {
-      email: values.email,
-      password: await bcrypt.hash(values.password, 10),
-      username: values.username,
-    },
-  });
-
-  return {
-    message: `${values.username} Successfully added to Database!`,
-    status: true,
-  };
-}
 
 export async function SaveCartToDB (items: CartItem[]) {
   const session = await getServerSession(authOptions);
