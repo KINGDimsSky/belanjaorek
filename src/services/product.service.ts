@@ -16,3 +16,16 @@ export async function getProductsByIds (productIds: string[]) {
 
   return products
 }
+
+export async function getSpesificProduct (slug : string) {
+  return await prisma.product.findUnique ({
+    where: {
+      slug : slug,
+    },
+    include : {
+      category: true,
+      Seller: true,
+      ProductImage: true
+    }
+  })
+}

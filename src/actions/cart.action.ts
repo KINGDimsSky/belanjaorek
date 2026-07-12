@@ -1,7 +1,7 @@
 "use server"
 
 import { authOptions } from "@/lib/auth";
-import { createACartDB } from "@/services/cart.service";
+import { createACartDB, getCartByIds } from "@/services/cart.service";
 import { CartItem } from "@/types";
 import { getServerSession } from "next-auth";
 
@@ -21,3 +21,15 @@ export async function SaveCartToDB (items: CartItem[]) {
     return {message: 'Failed to Save Cart to Database!', status: false};
   }
 }
+
+export async function getCartIdsAction () {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) return [];
+
+  const user = session.user.id;
+
+  return await getCartByIds(user);
+}
+
+//process

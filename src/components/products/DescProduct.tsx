@@ -8,7 +8,7 @@ import { UsecartStore } from "@/store/cart-store";
 import { ProductWithUsersAndCategory } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import { IoShieldSharp } from "react-icons/io5";
@@ -22,6 +22,7 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
     const defaultCartState = UsecartStore((state) => state.cartItems);
     const HasProduct = defaultCartState.find((item) => item.id === products.id);
     const {data: session, status} = useSession();
+    const [cartTransition, startCartTransition] = useTransition();
 
     const DecreaseAmount = () => {
       if (amount >= 2){
@@ -33,6 +34,12 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
         UsecartStore.setState({amount: amount})
     }, [amount])
     
+
+    const HandleAddToCart = () => {
+      
+    }
+
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-1 text-sm font-light text-blue-500 mb-2">

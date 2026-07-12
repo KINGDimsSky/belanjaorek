@@ -1,6 +1,7 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import DetailedProductComponent from "@/components/products/DetailedProducts";
 import { prisma } from "@/lib/db";
+import { getSpesificProduct } from "@/services/product.service";
 
 interface DetailedProductsPageProps {
     params: {
@@ -10,16 +11,7 @@ interface DetailedProductsPageProps {
 
 export default async function DetailedProductsPage ({params}: DetailedProductsPageProps) {
     const { slug } = params;
-    const product = await prisma.product.findUnique({
-      where : {
-        slug : slug 
-      },
-      include : {
-        category : true,
-        Seller: true,
-        ProductImage: true,
-      },
-    })
+    const product = await getSpesificProduct(slug);
     
     if (!product) {
       return (

@@ -13,7 +13,7 @@ import { MdNavigateNext } from "react-icons/md";
 export default function AboutProductComponent({products} : {products : ProductWithUsersCategoryandImages}) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [clicked, SetClicked] = useState<boolean>(false);
-  const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai productts nya
+  const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai products nya
 
   const nextSlide = () => {
     if (currentIndex < items.length - 1) {

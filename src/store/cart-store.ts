@@ -4,7 +4,6 @@ import { Product } from '@prisma/client';
 import { toast } from 'sonner';
 import { CartItem } from '@/types';
 
-
 interface CartState {
     cartItems: CartItem[];
     amount: number;

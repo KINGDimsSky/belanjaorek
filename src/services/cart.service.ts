@@ -36,3 +36,16 @@ export async function GetCartById (productsIds : string[]) {
 
     //Nanti disini syggg
 }
+
+export async function getCartByIds (userId : string) {
+    return await prisma.cart.findUnique({
+        where : {
+            userId : userId
+        },
+        include : {
+            CartItems : true
+        }
+    })
+}
+
+//process

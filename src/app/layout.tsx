@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 import UseWishlistInitializer from "@/components/sharedComponents/WhislistInitializer";
 import { getWishlistIdsAction } from "@/actions/wishlist.action";
+import { getCartIdsAction } from "@/actions/cart.action";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
   const initialWhislistsIds = await getWishlistIdsAction();
+  const initialCartIds = await getCartIdsAction();
+  // Dilanjutkan Nanti Untuk Progress Cart sync database
 
   return (
     <html lang="en" suppressHydrationWarning>
