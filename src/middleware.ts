@@ -1,5 +1,5 @@
 import { getToken } from "next-auth/jwt";
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { checkAuthentication } from "./middlewares/auth-checkers";
 
 export default async function Middleware (request: NextRequest) {

@@ -8,9 +8,9 @@ import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
 import { UsecartStore } from "@/store/cart-store";
 import { ToLocalePriceFormat } from "@/lib/utils";
-import { SaveCartToDB } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { SaveCartToDB } from "@/actions/cart.action";
 
 interface DrawerProps {
   state: boolean;

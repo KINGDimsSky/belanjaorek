@@ -1,7 +1,6 @@
 'use client';
 
 import { UseWhislistStore } from '@/store/wishlist-store';
-import { toggleWishlistAction } from '@/lib/actions';
 import { FaHeart } from 'react-icons/fa';
 import { CiHeart } from 'react-icons/ci';
 import { Fragment, useTransition } from 'react';
@@ -11,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Spinner } from '../ui/spinner';
+import { toggleWishlistAction } from '@/actions/wishlist.action';
 
 export default function WhislistButton({ productId, Isabsolute }: { productId: string , Isabsolute : boolean}) {
   const [isPending, startTransition] = useTransition();

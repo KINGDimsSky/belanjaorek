@@ -55,26 +55,3 @@ export async function createGoogleUser(data : {
     },
   });
 }
-
-export async function getProductsByIds (productIds: string[]) {
-  if (productIds.length === 0) return [];
-
-  const products = await prisma.product.findMany({
-    where : {
-      id : {
-        in : productIds
-      }
-    },
-    include : {
-      category: true
-    },
-  })
-
-  return products
-}
-
-export async function GetCartById (productsIds : string[]) {
-    if (productsIds.length === 0) return [];
-
-    //Nanti disini syggg
-}

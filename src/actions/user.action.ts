@@ -1,7 +1,7 @@
 "use server"
 
 import { RegisterSchema } from "@/lib/schema/auth-schema";
-import { createAnewUser, createGoogleUser, GetUserByEmail } from "@/services/auth";
+import { createAnewUser, createGoogleUser, GetUserByEmail } from "@/services/user.service";
 import z from "zod";
 
 export async function RegisterUser (values: z.infer<typeof RegisterSchema>) {

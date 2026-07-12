@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import { getWishlistIdsAction } from "@/lib/actions";
 import UseWishlistInitializer from "@/components/sharedComponents/WhislistInitializer";
+import { getWishlistIdsAction } from "@/actions/wishlist.action";
 
 const poppins = Poppins({
   subsets: ['latin'],

@@ -1,16 +1,13 @@
 'use client'
 
-import { toggleWishlistAction } from "@/lib/actions";
-import { cn } from "@/lib/utils";
 import { UseWhislistStore } from "@/store/wishlist-store";
 import { ProductWithCategory } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CiHeart } from "react-icons/ci";
-import { FaHeart } from "react-icons/fa";
 import WhislistButton from "../sharedComponents/WhislistButton";
+import { toggleWishlistAction } from "@/actions/wishlist.action";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
   const { name, price, image, IsDiscount, category, createdAt, slug, id} = product;

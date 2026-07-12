@@ -8,10 +8,10 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
-import { getWhislistProductsAction, toggleWishlistAction } from "@/lib/actions";
 import { toast } from "sonner";
 import { ProductWithCategory } from "@/types";
 import { Spinner } from "../ui/spinner";
+import { getWhislistProductsAction, toggleWishlistAction } from "@/actions/wishlist.action";
 
 interface WhislistProps {
     state : boolean;

@@ -1,8 +1,8 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { UserLoginValidate } from "../services/auth";
-import { handleGoogleLogin } from "@/actions/auth";
+import { UserLoginValidate } from "../services/user.service";
+import { handleGoogleLogin } from "@/actions/user.action";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
