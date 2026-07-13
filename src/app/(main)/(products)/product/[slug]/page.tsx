@@ -1,6 +1,5 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import DetailedProductComponent from "@/components/products/DetailedProducts";
-import { prisma } from "@/lib/db";
 import { getSpesificProduct } from "@/services/product.service";
 
 interface DetailedProductsPageProps {

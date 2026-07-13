@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Product } from '@prisma/client';
 import { toast } from 'sonner';
-import { CartItem } from '@/types';
+import { DetailedProductDTO, UICartItems } from '@/types';
 
 interface CartState {
-    cartItems: CartItem[];
+    cartItems: UICartItems[];
     amount: number;
-    addToCart: (product: Product) => void;
+    addToCart: (product: NonNullable<DetailedProductDTO>) => void;
+    setInitialCart : (items : UICartItems[]) => void;
     removeFromCart: (productId: string) => void;
     clearCart: () => void;
 }   
@@ -16,20 +16,33 @@ export const UsecartStore = create(persist<CartState>((set) => ({
     cartItems: [], 
     amount: 1,
 
+    setInitialCart : (items) => set((state) => {
+        return {cartItems : items};
+    }),
+
     addToCart: (product) => set((state) => {
-        const ExistingItem = state.cartItems.find((item) => item.id === product.id);
+        const ExistingItem = state.cartItems.find((item) => item.productId === product.id);
 
         if (ExistingItem) {
-          const UpdatedItem = state.cartItems.map((item) => item.id === product.id ? {...item, quantity: item.quantity + state.amount} : item)
+          const UpdatedItem = state.cartItems.map((item) => item.productId === product.id ? {...item, quantity: item.quantity + state.amount} : item)
           toast.success('Product Added to Cart!');
+          console.log (UpdatedItem);
           return {cartItems: UpdatedItem};
         }else {
             toast.success('Product Added to Cart!');
-            return {cartItems : [...state.cartItems, {...product, quantity: state.amount}]};
+            const newItem : UICartItems = {
+                productId : product.id,
+                name : product.name,
+                price : product.price,
+                image : product.image || '/NoProduct.jpg',
+                quantity : state.amount
+            }
+            console.log (newItem);
+            return {cartItems : [...state.cartItems, newItem]};
         }
     }),
     removeFromCart: (productID) => set((state) => {
-        const UpdatedItem = state.cartItems.filter((item) => item.id !== productID)
+        const UpdatedItem = state.cartItems.filter((item) => item.productId !== productID)
         toast.success('Product Removed from Cart!');
         return {cartItems: UpdatedItem}
     }),

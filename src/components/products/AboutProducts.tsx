@@ -4,13 +4,13 @@ import ClientRating from "@/components/products/ClientRating";
 import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";  
 import { cn } from "@/lib/utils";
-import { ProductWithUsersCategoryandImages } from "@/types";
+import { DetailedProductDTO,  } from "@/types";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdNavigateNext } from "react-icons/md";
 
-export default function AboutProductComponent({products} : {products : ProductWithUsersCategoryandImages}) {
+export default function AboutProductComponent({products} : {products : NonNullable<DetailedProductDTO>}) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [clicked, SetClicked] = useState<boolean>(false);
   const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai products nya

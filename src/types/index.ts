@@ -1,21 +1,22 @@
-import type { Product, Category, User, ProductImage } from "@prisma/client";
+import { getSpesificProduct } from "@/services/product.service";
+import type { Prisma } from "@prisma/client";
 
-export type ProductWithCategory = Product & {
-  category: Category;
-};
-
-export type ProductWithUsersAndCategory = Product & {
-  Seller : User;
-  category: Category;
+export type CartPayload = {
+  productId : string,
+  quantity : number
+}
+export type CartItemDTO = {
+  productId : string,
+  quantity : number
 }
 
-export interface CartItem extends Product { 
-    quantity: number;
+export type UICartItems = {
+  productId : string,
+  name : string,
+  price : number,
+  image : string,
+  quantity : number,
 }
 
-export type ProductWithUsersCategoryandImages = Product & {
-  Seller : User;
-  category: Category;
-  ProductImage : ProductImage[];
-}
+export type DetailedProductDTO = Prisma.PromiseReturnType<typeof getSpesificProduct>
 

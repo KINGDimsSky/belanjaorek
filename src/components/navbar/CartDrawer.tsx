@@ -53,7 +53,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
         ): (
           <div className="flex flex-col gap-2 mt-2">
             {CartItems.map((item) => (
-              <div className="flex gap-4" key={item.id}>
+              <div className="flex gap-4" key={item.productId}>
                 <div className="relative w-16 h-16 rounded-md">
                   <Image src={item.image || ''} alt={item.name} fill className="object-cover"/>
                 </div>
@@ -62,7 +62,7 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
                   <p className="text-sm font-semibold text-primary">{ToLocalePriceFormat(item.price)}</p>
                   <div className="flex justify-between">
                     <p className="text-xs">Quantity: {item.quantity}</p>
-                    <Button onClick={() => DeleteItem(item.id)} variant={'destructive'} className="w-12 h-4 text-xs px-4 rounded-e-md">Delete</Button>
+                    <Button onClick={() => DeleteItem(item.productId)} variant={'destructive'} className="w-12 h-4 text-xs px-4 rounded-e-md">Delete</Button>
                   </div>
                 </div>
               </div>

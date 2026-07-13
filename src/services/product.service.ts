@@ -23,8 +23,14 @@ export async function getSpesificProduct (slug : string) {
       slug : slug,
     },
     include : {
-      category: true,
-      Seller: true,
+      category : true,
+      Seller: {
+        select : {
+          id : true,
+          username : true,
+          image : true
+        }
+      },
       ProductImage: true
     }
   })

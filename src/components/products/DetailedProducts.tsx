@@ -2,9 +2,9 @@ import Image from "next/image";
 import BreadCrumb from "./BreadCrump";
 import AboutProductComponent from "@/components/products/AboutProducts";
 import DescProduct from "./DescProduct"
-import {ProductWithUsersCategoryandImages } from "@/types";
+import {DetailedProductDTO } from "@/types";
 
-export default function DetailedProductComponent({product} : {product : ProductWithUsersCategoryandImages}) {
+export default function DetailedProductComponent({product} : {product : NonNullable<DetailedProductDTO>}) {
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },

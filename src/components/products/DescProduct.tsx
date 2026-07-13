@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { UsecartStore } from "@/store/cart-store";
-import { ProductWithUsersAndCategory } from "@/types";
+import { DetailedProductDTO, } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
@@ -15,12 +15,12 @@ import { IoShieldSharp } from "react-icons/io5";
 import WishlistButton from "@/components/sharedComponents/WhislistButton";
 import { UseGlobalNavigationState } from "@/store/global-navigation-state";
 
-export default function DescProduct({products} : {products : ProductWithUsersAndCategory}) {
+export default function DescProduct({products} : {products : NonNullable<DetailedProductDTO>}) {
     const [amount, setAmount] = useState<number>(1);
     const CartDrawerToggle = UseGlobalNavigationState(state => state.ToggleCartState);
     const addToCart = UsecartStore((state) => state.addToCart);
     const defaultCartState = UsecartStore((state) => state.cartItems);
-    const HasProduct = defaultCartState.find((item) => item.id === products.id);
+    const HasProduct = defaultCartState.find((item) => item.productId === products.id);
     const {data: session, status} = useSession();
     const [cartTransition, startCartTransition] = useTransition();
 
@@ -38,7 +38,6 @@ export default function DescProduct({products} : {products : ProductWithUsersAnd
     const HandleAddToCart = () => {
       
     }
-
 
   return (
     <div className="flex flex-col">

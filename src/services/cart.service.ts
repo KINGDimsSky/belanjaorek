@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
-import { CartItem } from "@/types";
+import { CartPayload } from "@/types";
 
-export async function createACartDB (user : string, items: CartItem[]) {
+export async function createACartDB (user : string, items: CartPayload[]) {
     return await prisma.$transaction(async (tx) => {
         const cart = await tx.cart.upsert({
             where : {
@@ -19,10 +19,10 @@ export async function createACartDB (user : string, items: CartItem[]) {
             }
         })
 
-        if (items.length >= 0) {
+        if (items.length > 0) {
             await tx.cartItems.createMany({
                 data : items.map((item) => (
-                    {CartId : cart.id, productId : item.id, Quantity: item.quantity}
+                    {CartId : cart.id, productId : item.productId, Quantity: item.quantity}
                 ))
             })
         }
@@ -31,19 +31,27 @@ export async function createACartDB (user : string, items: CartItem[]) {
     })
 }
 
-export async function GetCartById (productsIds : string[]) {
-    if (productsIds.length === 0) return [];
-
-    //Nanti disini syggg
-}
-
 export async function getCartByIds (userId : string) {
     return await prisma.cart.findUnique({
         where : {
             userId : userId
         },
-        include : {
-            CartItems : true
+        select : {
+            CartItems : {
+                select : {
+                    productId : true,
+                    Quantity : true,
+                    Product : {
+                        select : {
+                            id : true,
+                            name : true,
+                            price : true,
+                            image : true
+                        }
+                    }
+                }
+            },
+
         }
     })
 }

@@ -2,10 +2,10 @@
 
 import { authOptions } from "@/lib/auth";
 import { createACartDB, getCartByIds } from "@/services/cart.service";
-import { CartItem } from "@/types";
+import {  CartItemDTO, CartPayload, UICartItems } from "@/types";
 import { getServerSession } from "next-auth";
 
-export async function SaveCartToDB (items: CartItem[]) {
+export async function SaveCartToDB (items: CartPayload[]) {
   const session = await getServerSession(authOptions);
   
   if (!session?.user.id) {
@@ -22,14 +22,23 @@ export async function SaveCartToDB (items: CartItem[]) {
   }
 }
 
-export async function getCartIdsAction () {
+export async function getCartIdsAction () : Promise<UICartItems[]> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) return [];
 
   const user = session.user.id;
+  const cart = await getCartByIds(user);
+  
+  if (!cart || !cart?.CartItems.length) return []
 
-  return await getCartByIds(user);
+  const { CartItems } = cart;
+  
+  return CartItems.map((item) => ({
+    productId: item.productId,
+    quantity: item.Quantity,
+    name : item.Product.name,
+    price : item.Product.price,
+    image : item.Product.image || '/NoProduct.jpg'
+  }))
 }
-
-//process
