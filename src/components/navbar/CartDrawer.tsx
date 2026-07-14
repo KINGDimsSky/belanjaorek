@@ -10,7 +10,9 @@ import { UsecartStore } from "@/store/cart-store";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { SaveCartToDB } from "@/actions/cart.action";
+import { deleteCartActions, SaveCartToDB } from "@/actions/cart.action";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface DrawerProps {
   state: boolean;
@@ -20,21 +22,33 @@ interface DrawerProps {
 export default function CartDrawer({ state, setState }: DrawerProps) {
   const CartItems = UsecartStore((state) => state.cartItems);
   const DeleteItem = UsecartStore((state) => state.removeFromCart);
-  const [IsPending, startTransition] = useTransition();
+  const [deletePending, startDeleteTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   useBodyScrollLock(state);
   useOnClickOutside(ref, () => setState(false));
   const router = useRouter();
+  const {data : session, status } = useSession(); 
 
-  const HandleClickingCheckout = () => {
-    startTransition(async () => {
-      const SaveToDB = await SaveCartToDB(CartItems);
+  const DeleteCartProduct = (productId : string) => {
+    if (status === 'unauthenticated') router.push('/login');
 
-      if (SaveToDB.status === false) {
-        toast.error(SaveToDB.message);
+    const previousCartItems = UsecartStore.getState().cartItems;
+    const itemToRollback = previousCartItems.find(item => item.productId === productId);
+
+    DeleteItem(productId);
+
+    startDeleteTransition(async () => {
+      const deleteActions = await deleteCartActions(productId);
+      
+      if (deleteActions.status === false) {
+        if (itemToRollback) {
+          UsecartStore.getState().setInitialCart(previousCartItems);
+        }
+        toast.error(deleteActions.message);
       }else {
-        router.push('/checkout');
+        toast.success(deleteActions.message)
       }
+
     })
   }
 
@@ -55,14 +69,18 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
             {CartItems.map((item) => (
               <div className="flex gap-4" key={item.productId}>
                 <div className="relative w-16 h-16 rounded-md">
-                  <Image src={item.image || ''} alt={item.name} fill className="object-cover"/>
+                  <Link href={`/product/${item.slug}`}>
+                    <Image src={item.image || ''} alt={item.name} fill className="object-cover"/>
+                  </Link>
                 </div>
                 <div className="flex flex-col justify-between">
-                  <p className="text-xs truncate">{item.name}</p>
+                  <Link href={`/product/${item.slug}`}>
+                    <p className="text-xs truncate">{item.name}</p>
+                  </Link>
                   <p className="text-sm font-semibold text-primary">{ToLocalePriceFormat(item.price)}</p>
                   <div className="flex justify-between">
                     <p className="text-xs">Quantity: {item.quantity}</p>
-                    <Button onClick={() => DeleteItem(item.productId)} variant={'destructive'} className="w-12 h-4 text-xs px-4 rounded-e-md">Delete</Button>
+                    <Button onClick={() => DeleteCartProduct(item.productId)} variant={'destructive'} className="w-12 h-4 text-xs px-4 rounded-e-md">Delete</Button>
                   </div>
                 </div>
               </div>
@@ -71,9 +89,11 @@ export default function CartDrawer({ state, setState }: DrawerProps) {
         )}
           {CartItems.length ? (
              <div className="items-end mt-auto text-foreground"> 
-            <Button onClick={HandleClickingCheckout} disabled={IsPending} variant={'default'} className="w-full rounded-e-md text-foreground font-semibold">
-              {IsPending ? "Saving..." : "Checkout"}
-            </Button>
+             <Link href={'/checkout'}>
+               <Button variant={'default'} className="w-full rounded-e-md text-foreground font-semibold text-white">
+                 Checkout
+               </Button>
+             </Link>
             </div>
           ) : (
             null

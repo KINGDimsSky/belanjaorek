@@ -3,7 +3,6 @@
 import { authOptions } from "@/lib/auth";
 import { getProductsByIds } from "@/services/product.service";
 import { createSpesificWhislist, deleteSpesificWhislist, getExistingWhislistItem, getWishlistById } from "@/services/wishlist.service";
-import { CartItemDTO } from "@/types";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 

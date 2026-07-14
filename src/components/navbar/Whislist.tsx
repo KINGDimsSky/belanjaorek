@@ -8,8 +8,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "../ui/button";
-import { toast } from "sonner";
-import { ProductWithCategory } from "@/types";
+import { toast } from "sonner";;
 import { Spinner } from "../ui/spinner";
 import { getWhislistProductsAction, toggleWishlistAction } from "@/actions/wishlist.action";
 

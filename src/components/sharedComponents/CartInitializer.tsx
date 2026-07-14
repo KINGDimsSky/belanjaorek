@@ -1,7 +1,7 @@
 "use client";
 
 import { UsecartStore } from "@/store/cart-store";
-import { CartItemDTO, UICartItems } from "@/types";
+import { UICartItems } from "@/types";
 import { useEffect, useRef } from "react";
 
 export default function CartInitializer({cartItems } : {cartItems : UICartItems[]}) {

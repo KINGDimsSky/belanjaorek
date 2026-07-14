@@ -31,6 +31,25 @@ export async function createACartDB (user : string, items: CartPayload[]) {
     })
 }
 
+export async function deleteProductFromCart (CartId : string, productId : string) {
+    return await prisma.cartItems.delete({
+        where: {
+            productId_CartId : {productId, CartId}
+        }
+    })
+}
+
+export async function getSpesificCartId (userId : string) {
+    return await prisma.cart.findUnique({
+        where : {
+            userId : userId
+        },
+        select : {
+            id : true
+        }
+    })
+}
+
 export async function getCartByIds (userId : string) {
     return await prisma.cart.findUnique({
         where : {
@@ -46,7 +65,8 @@ export async function getCartByIds (userId : string) {
                             id : true,
                             name : true,
                             price : true,
-                            image : true
+                            image : true,
+                            slug : true
                         }
                     }
                 }
@@ -55,5 +75,6 @@ export async function getCartByIds (userId : string) {
         }
     })
 }
+
 
 //process

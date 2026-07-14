@@ -5,6 +5,7 @@ export type CartPayload = {
   productId : string,
   quantity : number
 }
+
 export type CartItemDTO = {
   productId : string,
   quantity : number
@@ -16,6 +17,7 @@ export type UICartItems = {
   price : number,
   image : string,
   quantity : number,
+  slug : string
 }
 
 export type DetailedProductDTO = Prisma.PromiseReturnType<typeof getSpesificProduct>

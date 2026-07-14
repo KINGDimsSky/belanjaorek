@@ -8,21 +8,52 @@ import { UsecartStore } from "@/store/cart-store";
 import { DetailedProductDTO, } from "@/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState, useTransition } from "react";
+import { startTransition, useEffect, useState, useTransition, } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import { IoShieldSharp } from "react-icons/io5";
 import WishlistButton from "@/components/sharedComponents/WhislistButton";
 import { UseGlobalNavigationState } from "@/store/global-navigation-state";
+import { useRouter } from "next/navigation";
+import { SaveCartToDB } from "@/actions/cart.action";
+import { toast } from "sonner";
 
 export default function DescProduct({products} : {products : NonNullable<DetailedProductDTO>}) {
     const [amount, setAmount] = useState<number>(1);
     const CartDrawerToggle = UseGlobalNavigationState(state => state.ToggleCartState);
     const addToCart = UsecartStore((state) => state.addToCart);
+    const [cartTransition, startCartTransition] = useTransition();
     const defaultCartState = UsecartStore((state) => state.cartItems);
     const HasProduct = defaultCartState.find((item) => item.productId === products.id);
     const {data: session, status} = useSession();
-    const [cartTransition, startCartTransition] = useTransition();
+    const router = useRouter()
+
+    const HandleAddToCart =  async (products : NonNullable<DetailedProductDTO>) => {
+      if (status === 'unauthenticated') return router.push('/login');
+
+      const previousCartItems = UsecartStore.getState().cartItems;
+
+      addToCart(products);
+
+      const updatedCartItems = UsecartStore.getState().cartItems;
+
+      const payload = updatedCartItems.map((item) => ({
+        productId: item.productId,
+        quantity : item.quantity
+      }))
+
+      startCartTransition(async () => {
+        const SaveToDB = await SaveCartToDB(payload);
+        
+        if (SaveToDB.status === false) {
+          UsecartStore.getState().setInitialCart(previousCartItems)
+          toast.error(SaveToDB.message);
+        }else {
+          toast.success(SaveToDB.message);
+        }
+
+      });
+    }
 
     const DecreaseAmount = () => {
       if (amount >= 2){
@@ -34,10 +65,6 @@ export default function DescProduct({products} : {products : NonNullable<Detaile
         UsecartStore.setState({amount: amount})
     }, [amount])
     
-
-    const HandleAddToCart = () => {
-      
-    }
 
   return (
     <div className="flex flex-col">
@@ -83,7 +110,7 @@ export default function DescProduct({products} : {products : NonNullable<Detaile
             -
           </button>
           <p>{amount}</p>
-          <button onClick={() => setAmount((prevState) => prevState + 1)} className="text-xl">
+          <button onClick={() => setAmount((prevstate) => prevstate + 1)} className="text-xl">
             +
           </button>
         </div>
@@ -118,7 +145,7 @@ export default function DescProduct({products} : {products : NonNullable<Detaile
             View In Cart
           </Button>
         ) : (
-          <Button onClick={() => addToCart(products)} className="flex items-center font-semibold text-white w-full"
+          <Button onClick={() => HandleAddToCart(products)} className="flex items-center font-semibold text-white w-full"
           variant={"default"}>
           Add to Cart
           </Button>

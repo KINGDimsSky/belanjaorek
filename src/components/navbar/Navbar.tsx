@@ -17,6 +17,7 @@ import CartDrawer from "./CartDrawer";
 import Whislist from "./Whislist";
 import { UseGlobalNavigationState } from "@/store/global-navigation-state";
 import { UseWhislistStore } from "@/store/wishlist-store";
+import { UsecartStore } from "@/store/cart-store";
 
 export default function Navbar() {
   const NavigationState = UseGlobalNavigationState(state => state.navigationBarState);
@@ -29,6 +30,9 @@ export default function Navbar() {
 
   const WhislistIds = UseWhislistStore((state) => state.WhislistProductIds);
   const TotalWhistlistItems = Array.from(WhislistIds).length;
+
+  const CartsIds = UsecartStore((state) => state.cartItems);
+  const TotalCartsItems = CartsIds.length;
 
   return (
     <div className="w-full justify-between items-center">
@@ -72,11 +76,20 @@ export default function Navbar() {
           </div>
           ))}
           <div className="flex gap-4">
-            <ShoppingCart onClick={() => CartDrawerToggle()} className="hover:text-primary cursor-pointer"/>
+            {TotalCartsItems ? (
+              <div className="flex "> 
+               <div className="relative -mr-3 top-2 left-5 text-center rounded-full w-4 h-4 text-xs bg-pink-600 text-white">
+                 <h2>{TotalCartsItems}</h2>
+               </div>
+              <ShoppingCart onClick={() => CartDrawerToggle()} className="hover:text-primary cursor-pointer"/>
+             </div>
+            ) : (
+              <ShoppingCart onClick={() => CartDrawerToggle()} className="hover:text-primary cursor-pointer"/>
+            )}
             {TotalWhistlistItems ? (
              <div className="flex "> 
-               <div className="relative -mr-3 top-2 left-5 text-center rounded-full w-4 h-4 text-xs bg-pink-500">
-                 <h2>1</h2>
+               <div className="relative -mr-3 top-2 left-5 text-center rounded-full w-4 h-4 text-xs bg-pink-600 text-white">
+                 <h2>{TotalWhistlistItems}</h2>
                </div>
                <Heart onClick={() => WhislistToggle()} className="hover:text-primary cursor-pointer"/>
              </div>
