@@ -4,9 +4,10 @@ import Link from "next/link";
 import ProductCard from "../products/product-card";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { getProductsByCategoryActions } from "@/actions/product.action";
 
 const Data = [
-  { name: "New Arrivals", slug: "all" },
+  { name: "New Arrivals", slug: "All" },
   { name: "Unity Assets", slug: "unity-assets" },
   { name: "SAMP", slug: "samp" },
   { name: "Icons", slug: "icons" },
@@ -14,14 +15,13 @@ const Data = [
 ];
 
 export default function ForYouProduct() {
-  const [CategoryFilter, SetCategoryFilter] = useState<string>("all");
+  const [CategoryFilter, SetCategoryFilter] = useState<string>("All");
   const [Product, SetProduct] = useState<any[]>([]);
-
+ 
   useEffect(() => {
     const fetchFilteredProducts = async () => {
       try {
-        const res = await fetch(`/api/productbyfilter?category=${CategoryFilter}`);
-        const data = await res.json();
+        const data = await getProductsByCategoryActions(CategoryFilter);
         SetProduct(data.data);
       } catch (error) {
         console.error("Gagal mengambil produk:", error);

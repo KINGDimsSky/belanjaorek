@@ -4,6 +4,7 @@ import { useBodyScrollLock } from "@/hooks/others/use-body-scroll";
 import { useOnClickOutside } from "@/hooks/others/use-click-outside";
 import { ToLocalePriceFormat } from "@/lib/utils";
 import { UseWhislistStore } from "@/store/wishlist-store";
+import { ProductWithCategory } from "@/types";
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { IoMdClose } from "react-icons/io";

@@ -8,17 +8,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RegisterSchema } from "@/lib/schema/auth-schema";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RegisterUser } from "@/lib/actions";
+import { RegisterUser } from "@/actions/user.action";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";

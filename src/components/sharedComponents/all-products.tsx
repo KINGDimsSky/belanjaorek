@@ -4,17 +4,9 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import ProductCard from "../products/product-card";
 import type {Category} from "@prisma/client";
-import { ProductWithCategory } from "@/types";
 import { FaFilter } from "react-icons/fa";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
+import { ProductWithCategory } from "@/types";
 
 interface AllProductsProps {
   products: ProductWithCategory[];

@@ -1,6 +1,7 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import DetailedProductComponent from "@/components/products/DetailedProducts";
 import { getSpesificProduct } from "@/services/product.service";
+import { notFound } from "next/navigation";
 
 interface DetailedProductsPageProps {
     params: {
@@ -10,8 +11,12 @@ interface DetailedProductsPageProps {
 
 export default async function DetailedProductsPage ({params}: DetailedProductsPageProps) {
     const { slug } = params;
+    
+    if (!slug) notFound();
+
     const product = await getSpesificProduct(slug);
     
+
     if (!product) {
       return (
         <div className="flex items-center justify-center min-h-screen">

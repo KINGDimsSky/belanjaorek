@@ -1,7 +1,7 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import BreadCrumb from "@/components/products/BreadCrump";
 import AllProducts from "@/components/sharedComponents/all-products";
-import { prisma } from "@/lib/db";
+import { countTotalProduct, getAllCategory, getFilteredProducts } from "@/services/product.service";
 import { IoReturnUpBackSharp } from "react-icons/io5";
 
 interface ProductsPageProps {
@@ -10,37 +10,14 @@ interface ProductsPageProps {
     sort?: string;
     discount?: string;
     filter?: string;
-    // filter lain cak otw misal: sex?: 'true'
   }
 }
 
 export default async function ProductsPage({searchParams} : ProductsPageProps) {
   const { category, sort, discount, filter } = searchParams;
-  const productsLength = await prisma.product.count();
-
-  const products = await prisma.product.findMany({
-    where: {
-      ...(category && category !== 'all' && {
-        category: { slug: category },
-      }),
-
-      ...(discount && discount !== "false" && {
-        IsDiscount: true,
-      })
-    },
-    orderBy: {
-       ...(sort === 'newest' && { createdAt: 'desc' }),
-       ...(filter && filter !== 'default' && {
-        
-       })
-    },
-    include: {
-        category: true 
-    },
-    take: 12,
-  });
-  
-  const categories = await prisma.category.findMany();
+  const productsLength = await countTotalProduct();
+  const products = await getFilteredProducts(category, sort, discount, filter);
+  const categories = await getAllCategory();
 
   const BreadCrumbItems = [
     {

@@ -9,12 +9,12 @@ export default function DetailedProductComponent({product} : {product : NonNulla
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { 
-      label: product.category.title, // Dinamis dari data kategori
+      label: product.category.title, 
       href: `/products?category=${product.category.slug}` 
     },
     { 
-      label: product.name, // Dinamis dari nama produk
-      href: `/product/${product.slug}` // Link terakhir akan otomatis menjadi teks
+      label: product.name,
+      href: `/product/${product.slug}`
     }
   ];
 
