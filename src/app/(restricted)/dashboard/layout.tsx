@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 
-export default function dashboardLayout ({children} : {children : React.ReactNode}) {
+export default async function dashboardLayout ({children} : {children : React.ReactNode}) {
     return (
     <SidebarProvider>
       <AppSidebar />

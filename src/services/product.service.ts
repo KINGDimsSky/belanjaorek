@@ -95,5 +95,10 @@ export async function getProductsByCategory (category ?: string) {
       
       take : 10
     })
- 
+}
+
+export async function getAllProductsByOwner (userId: string) {
+  return await prisma.product.findMany({
+    
+  })
 }
