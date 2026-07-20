@@ -39,7 +39,7 @@ model Product {
   CartItems          CartItems[]
   category           Category             @relation(fields: [categoryId], references: [id])
   Seller             User                 @relation(fields: [userId], references: [id])
-  ProductDescription ProductDescription[]
+  ProductDescription ProductDescription?
   ProductImage       ProductImage[]
   Wishlist           Wishlist[]
 
@@ -61,7 +61,7 @@ model ProductDescription {
   id                String  @id @default(cuid())
   description       String
   VerifiedProduct   Boolean @default(false) @map("verifiedproduct")
-  productId         String
+  productId         String  @unique
   LatestVersion     String  @default("v1") @map("latestversion")
   LicensesAgreement String  @default("No Licenses") @map("licensesagreement")
   Product           Product @relation(fields: [productId], references: [id])

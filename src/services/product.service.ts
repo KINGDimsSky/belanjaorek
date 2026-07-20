@@ -109,6 +109,11 @@ export async function createSpesificProduct (product : createProductDTO) {
     data : {
       name : product.name,
       slug : product.slug,
+      ProductDescription : {
+        create : {
+          description: product.description
+        }
+      },
       price : product.price,
       Stock : product.stock,
       categoryId: product.categoryId,

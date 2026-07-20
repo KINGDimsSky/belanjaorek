@@ -4,7 +4,8 @@ const nextConfig = {
         remotePatterns : [
             {
                 protocol: 'https',
-                hostname: 'lh3.googleusercontent.com'
+                hostname: 'lh3.googleusercontent.com', 
+                hostname : 'yoztctprxrvdzabfpwxo.supabase.co'
             }
         ]
     }

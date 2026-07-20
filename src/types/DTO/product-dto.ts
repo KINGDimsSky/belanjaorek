@@ -1,6 +1,7 @@
 export type createProductDTO = {
     name : string,
     slug : string,
+    description : string,
     image ?: string | '/NoProduct.jpg',
     price : number,
     isDiscount : boolean,

@@ -30,10 +30,12 @@ export default function ImageDropZone ({value, onChange} : ImageDropzoneProps) {
                     headers: { "Content-Type" : file.type}
                 }); 
 
-                onChange(publicUrl)
+                toast('Successfully Uploaded Image!');
+                onChange(publicUrl);
             }
         }catch (err) {
             toast.error(`Upload Gagal!, Message : ${err}`)
+            console.log ('asu')
         }finally {
             setIsUploading(false);
         }
@@ -54,7 +56,7 @@ export default function ImageDropZone ({value, onChange} : ImageDropzoneProps) {
                     <p>Uploading Files...</p>
                 </div>
             ) : value ? (
-                <Image src={value} alt="Preview" className="h-40 mx-auto object-cover rounded-md"/>
+                <Image src={value} width={300} height={300} alt="Preview" className="h-40 mx-auto object-cover rounded-md"/>
             ) : (
                 <p>Drag 'n' drop some files here, or click to select files (Max 5MB)</p>
             )}

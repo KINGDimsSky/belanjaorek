@@ -1,6 +1,7 @@
 "use client";
 
 import ImageDropZone from "@/components/sharedComponents/ImageDropZone";
+import RichTextEditor from "@/components/sharedComponents/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -24,6 +25,7 @@ export default function AddProductsPage() {
     defaultValues: {
       name: "",
       slug: "",
+      description: "",
       image: "",
       price : 0,
       isDiscount: false,
@@ -163,10 +165,25 @@ export default function AddProductsPage() {
                     ))}
                   </select>
                 </FormControl>
+                <FormMessage/>
               </FormItem>
             )}>
             </FormField>
             )}
+            
+            <FormField
+            control={form.control}
+            name="description"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Description Product's</FormLabel>
+                <FormControl>
+                  <RichTextEditor value={field.value} onChange={field.onChange}/>
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}>
+            </FormField>
 
             <Button type="submit" className="">
               Create A Product
