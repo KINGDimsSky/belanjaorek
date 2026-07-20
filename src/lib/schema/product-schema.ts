@@ -11,6 +11,7 @@ export const productCreateSchema = z.object ({
     image : z.string({error: 'Must be a Image URL'}),
     isDiscount : z.coerce.boolean<boolean>({error: 'Must boolean (True or False)'}),
     stock : z.coerce.number<number>({error: 'Stock must a Number!'}),
-    discountPrice : z.coerce.number<number>({error : 'Discount Price must a Number!'}).optional()
+    discountPrice : z.coerce.number<number>({error : 'Discount Price must a Number!'}).optional(),
+    categoryId : z.string({error: 'Category Must Selected!'})
 })
 

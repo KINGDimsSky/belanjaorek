@@ -1,3 +1,4 @@
+import { getServerSession } from "next-auth";
 import { prisma } from "../lib/db";
 import bcrypt from "bcryptjs";
 
@@ -54,4 +55,14 @@ export async function createGoogleUser(data : {
       image: data.image,
     },
   });
+}
+
+export async function getAuthSession () {
+  const session = await getServerSession();
+
+  if (!session?.user) return null;
+
+  const {user} = session;
+
+  return user
 }

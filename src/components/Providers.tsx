@@ -17,12 +17,11 @@ export function Providers({ children }: ProvidersProps) {
     defaultOptions : {
       queries: {
         staleTime: 120 * 1000,
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,  
       }
     }
   }) 
   )
-
 
   return (
     <SessionProvider>

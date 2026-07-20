@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { createProductDTO } from "@/types/DTO/product-dto";
 
 export async function getProductsByIds (productIds: string[]) {
   if (productIds.length === 0) return [];
@@ -100,5 +101,21 @@ export async function getProductsByCategory (category ?: string) {
 export async function getAllProductsByOwner (userId: string) {
   return await prisma.product.findMany({
     
+  })
+}
+
+export async function createSpesificProduct (product : createProductDTO) {
+  return await prisma.product.create({
+    data : {
+      name : product.name,
+      slug : product.slug,
+      price : product.price,
+      Stock : product.stock,
+      categoryId: product.categoryId,
+      userId: product.userId,
+      image : product.image,
+      IsDiscount: product.isDiscount,
+      DiscountPrice: product.discountPrice,      
+    }
   })
 }
