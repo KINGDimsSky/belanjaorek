@@ -3,7 +3,7 @@ export type createProductDTO = {
     slug : string,
     description : string,
     mainImage ?: string | '/NoProduct.jpg',
-    productImage ?: string[],
+    productImage ?: string[] | undefined,
     latestVersion ?: string,
     price : number,
     isDiscount : boolean,

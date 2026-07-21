@@ -8,8 +8,8 @@ import Image from "next/image";
 import { Spinner } from "../ui/spinner";
 
 interface ImageDropzoneProps {
-    value : string[];
-    onChange : (url: string[]) => void;
+    value ?: string | string[];
+    onChange : (url: any) => void;
     isMainImage ?: boolean
 }
 
@@ -31,10 +31,16 @@ export default function ImageDropZone ({isMainImage = false ,value, onChange} : 
                     headers: { "Content-Type" : file.type}
                 }); 
 
-
                 toast.success('Successfully Uploaded Image!');
-                const newUrl = publicUrl
-                onChange([...value, newUrl]);
+                
+                if (isMainImage) {
+                  onChange(publicUrl);
+
+                } else {
+                    const currentValue = Array.isArray(value) ? value : []
+
+                    onChange([...currentValue, publicUrl]);
+                }
             }
         }catch (err) {
             toast.error(`Upload Gagal!, Message : ${err}`)
@@ -47,8 +53,8 @@ export default function ImageDropZone ({isMainImage = false ,value, onChange} : 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept : {"image/jpeg": [], "image/png" : [], "image/webp": []},
-        maxFiles: 5,
-    })
+        maxFiles: isMainImage ? 1 : 5,
+    })  
 
     return (
         <div {...getRootProps()} className={`border-2 border-dashed p-4 rounded-md text-center cursor-pointer transition-colors hover:border-primary hover:bg-primary/10 ${isDragActive ? "border-primary bg-primary/10" : "border-border"}`}>
@@ -58,10 +64,16 @@ export default function ImageDropZone ({isMainImage = false ,value, onChange} : 
                     <Spinner/>
                     <p>Uploading Files...</p>
                 </div>
-            ) : value ? (
+            ) : isMainImage && typeof value === "string" && value ? (
                 <Image src={value} width={300} height={300} alt="Preview" className="h-40 mx-auto object-cover rounded-md"/>
+            ) : !isMainImage && Array.isArray(value) && value.length > 0 ? (
+                <div className="flex flex-wrap gap-2 justify-center">
+                    {value.map((url, idx) => (
+                        <Image key={idx} src={url} width={100} height={100} alt={`Gallery ${idx}`} className="h-20 w-20 object-cover rounded-md"/>
+                    ))}
+                </div>
             ) : (
-                <p>Drag 'n' drop some files here, or click to select files (Max 5MB)</p>
+                <p>{isMainImage ? "Upload Gambar Utama (Single)" : "Drag & Drop Gambar Pendukung (Max 5)"}</p>
             )}
         </div>
     )

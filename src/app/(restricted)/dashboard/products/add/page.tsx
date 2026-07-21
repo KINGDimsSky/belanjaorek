@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
+
 export default function AddProductsPage() {
   const [message, setMessage] = useState<string>("");
   const usePOSTProduct = useCreateProductMutation();
@@ -27,13 +28,13 @@ export default function AddProductsPage() {
       name: "",
       slug: "",
       description: "",
-      mainImage: "",
-      latestVersion : "",
-      productImage : "",
       price : 0,
+      mainImage: "",
+      productImage : [],
+      latestVersion : "",
       isDiscount: false,
-      discountPrice: 0,
       stock: 0,
+      discountPrice: 0,
       categoryId : ''
     },
   });
@@ -160,7 +161,7 @@ export default function AddProductsPage() {
             render={({field}) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value} required {...field}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} required>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih Kategori Produk"/>
