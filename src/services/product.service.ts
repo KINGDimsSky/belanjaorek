@@ -100,7 +100,31 @@ export async function getProductsByCategory (category ?: string) {
 
 export async function getAllProductsByOwner (userId: string) {
   return await prisma.product.findMany({
-    
+      where : {
+        userId : userId
+      },
+      include : {
+        category : true,
+        ProductDescription : {
+          select : {
+            id : true,
+            description : true,
+            LatestVersion : true,
+          }
+        },
+        ProductImage : {
+          select : {
+            id : true,
+            url : true
+          }
+        },
+        productVerified : {
+          select : {
+            VerifiedProduct : true,
+            LicensesAgreement : true
+          }
+        }
+      }
   })
 }
 
@@ -111,10 +135,13 @@ export async function createSpesificProduct (product : createProductDTO) {
       slug : product.slug,
       ProductDescription : {
         create : {
-          description: product.description
+          description: product.description,
+        ...(product.latestVersion && {
+          LatestVersion : product.latestVersion
+        })
         }
       },
-      ProductImage : product.productImage ? {
+      ProductImage : product.productImage && product.productImage.length > 0 ? {
         createMany : {
           data : product.productImage.map(url => ({
             url : url,
@@ -126,7 +153,9 @@ export async function createSpesificProduct (product : createProductDTO) {
       Stock : product.stock,
       categoryId: product.categoryId,
       userId: product.userId,
-      MainImage : product.mainImage,
+      ...(product.mainImage && {
+        MainImage : product.mainImage,
+      }),
       IsDiscount: product.isDiscount,
       DiscountPrice: product.discountPrice,      
     }

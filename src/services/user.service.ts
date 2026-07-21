@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { prisma } from "../lib/db";
 import bcrypt from "bcryptjs";
+import { authOptions } from "@/lib/auth";
 
 export async function UserLoginValidate(email : string, password : string) {
   const IsExisting = await GetUserByEmail(email)
@@ -58,7 +59,7 @@ export async function createGoogleUser(data : {
 }
 
 export async function getAuthSession () {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) return null;
 

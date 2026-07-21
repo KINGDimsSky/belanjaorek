@@ -1,20 +1,19 @@
 "use server"
 
-import { authOptions } from "@/lib/auth";
 import { createACartDB, deleteProductFromCart, getCartByIds, getSpesificCartId } from "@/services/cart.service";
+import { getAuthSession } from "@/services/user.service";
 import {  CartPayload, UICartItems } from "@/types";
-import { getServerSession } from "next-auth";
 
 export async function SaveCartToDB (items: CartPayload[]) {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession()
   
-  if (!session?.user.id) {
+  if (!session) {
     return {message: 'Must Login to Use Cart Features!', status: false};
   }
-  const user = session.user.id;
+  const { id } = session
   
   try {
-    await createACartDB(user, items);
+    await createACartDB(id, items);
     return {message: 'Product Added To Cart!', status: true};
   }catch(error) {
     console.error("Failed to save cart:", error);
@@ -23,12 +22,12 @@ export async function SaveCartToDB (items: CartPayload[]) {
 }
 
 export async function getCartIdsAction () : Promise<UICartItems[]> {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession();
 
-  if (!session?.user?.id) return [];
+  if (!session) return [];
 
-  const user = session.user.id;
-  const cart = await getCartByIds(user);
+  const {id} = session
+  const cart = await getCartByIds(id);
   
   if (!cart || !cart?.CartItems.length) return []
 
@@ -39,20 +38,20 @@ export async function getCartIdsAction () : Promise<UICartItems[]> {
     quantity: item.Quantity,
     name : item.Product.name,
     price : item.Product.price,
-    image : item.Product.image || '/NoProduct.jpg',
+    image : item.Product.MainImage || '/NoProduct.jpg',
     slug : item.Product.slug
   }))
 }
 
 export async function deleteCartActions (productId : string) {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession();
 
-  if (!session?.user?.id) {
+  if (!session) {
     return {message : 'Must Login to Use Cart Features!', status : false};
   }
 
-  const userId = session.user.id;
-  const cartId = await getSpesificCartId(userId);
+  const { id } = session;
+  const cartId = await getSpesificCartId(id);
 
   console.log (cartId);
 

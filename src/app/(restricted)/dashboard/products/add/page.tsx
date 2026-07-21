@@ -26,7 +26,6 @@ export default function AddProductsPage() {
     resolver: zodResolver(productCreateSchema),
     defaultValues: {
       name: "",
-      slug: "",
       description: "",
       price : 0,
       mainImage: "",
@@ -40,11 +39,10 @@ export default function AddProductsPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof productCreateSchema>) => {
-    try {
-      console.log (values)
-    }catch(error) {
-
-    }
+      console.log (values);
+      await usePOSTProduct.mutateAsync(values)
+      
+      form.reset();
   }
 
   return (
@@ -65,20 +63,6 @@ export default function AddProductsPage() {
                   <FormMessage/>
                 </FormItem>
              )}> 
-            </FormField>
-
-            <FormField
-            control={form.control}
-            name="slug"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel> Slug (Auto Generated)</FormLabel>
-                <FormControl>
-                  <Input  type="text" {...field} placeholder="Product - Slug" className="bg-muted cursor-not-allowed"/>
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}>
             </FormField>
 
             <FormField

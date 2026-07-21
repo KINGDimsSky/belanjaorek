@@ -44,11 +44,10 @@ export default function ImageDropZone ({isMainImage = false ,value, onChange} : 
             }
         }catch (err) {
             toast.error(`Upload Gagal!, Message : ${err}`)
-            console.log ('asu')
         }finally {
             setIsUploading(false);
         }
-    }, [onChange]);
+    }, [onChange, value, isMainImage]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,

@@ -1,35 +1,22 @@
 'use client'
 
-import { UseWhislistStore } from "@/store/wishlist-store";
 import { ProductWithCategory } from "@/types";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import WhislistButton from "../sharedComponents/WhislistButton";
-import { toggleWishlistAction } from "@/actions/wishlist.action";
+import { useMemo } from "react";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
   const { name, price, MainImage, IsDiscount, category, createdAt, slug, id} = product;
-  const WhislistedItem = UseWhislistStore((state) => state.WhislistProductIds);
-  const ToggleWhislist = UseWhislistStore((state) => state.toggleWhislist);
-  const IsWhislisted = WhislistedItem.has(product.id);
-  const {data: session, status} = useSession();
-  const router = useRouter();
 
-  const createdDate = new Date(createdAt); 
-  const now = new Date();
-  const diffTime = Math.abs(now.getTime() - createdDate.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  const isNew = diffDays <= 14;
+  const isNew = useMemo(() => {
+    const createdDate = new Date(createdAt); 
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - createdDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  const HandleButtonClick = (productId : string) => {
-    if (status === 'unauthenticated') {
-     return router.push('/login');
-    }
-    
-    toggleWishlistAction(productId);
-  }
+    return diffDays <= 14
+  }, [product.createdAt])
 
 
   return (

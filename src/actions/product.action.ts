@@ -1,7 +1,8 @@
 "use server"
 
 import { categoryQuerySchema, productCreateSchema } from "@/lib/schema/product-schema"
-import { createSpesificProduct, getAllCategory, getProductsByCategory } from "@/services/product.service"
+import { RemoveSpaceAndReplaceWithHypen } from "@/lib/utils";
+import { createSpesificProduct, getAllCategory, getAllProductsByOwner, getProductsByCategory } from "@/services/product.service"
 import { getAuthSession } from "@/services/user.service";
 import z from "zod";
 
@@ -18,7 +19,7 @@ export async function getProductsByCategoryActions (category : string) {
     try {
         const result = await getProductsByCategory(category)
 
-        if (result.length === 0) return {message : 'No Products Found!', data : result,  status: false}
+        if (result.length === 0) return {message : 'No Products Found!', data : result,  status: true}
 
         return {message : 'Successfully Getting Products By Category', data : result, status: true}
     }catch (error) {
@@ -31,25 +32,38 @@ export async function createSpesificProductAction (productPayload :z.infer<typeo
     const isAuthenticated = await getAuthSession();
 
     if (!isAuthenticated) {
-        return {message : 'Error!, you are not Logged In!', data: [], status : false}
+        return {message : 'Error!, you are not Logged In!', data: null, status : false}
     }
 
     const {id} = isAuthenticated
 
     if (!validatedFields.success) {
-        return {message: 'Invalid Input Parameters!', data : [], status: false}
+        return {message: 'Invalid Input Parameters!', data : null, status: false}
     }
+
+    let {mainImage} = validatedFields.data
+    
+    if (mainImage === "") {
+        mainImage = undefined
+    }
+    
+    const { name } = validatedFields.data;
+    const slug = RemoveSpaceAndReplaceWithHypen(name)
+
 
     const payload = {
         ...validatedFields.data,
+        slug : slug,
         userId: id,
     }
 
     try {
         await createSpesificProduct(payload)
 
+        return {message : `Success Created ${validatedFields.data.name} products`, data : productPayload, status: true}
     }catch(error) {
-
+        console.error("[PRODUCT_CREATE_ERROR]:", error); 
+        return {message : 'Oops Something Went Wrong!', data : null, status : false}
     }
 }
 
@@ -60,5 +74,23 @@ export async function getAllCategoryActions () {
         return {message : 'success Getting All Category', data : result, status: true}
     }catch(error) {
         return {message : error, data : [], status : false}
+    }
+}
+
+export async function getProductsByOwnerActions () {
+    const user = await getAuthSession();
+
+    if (!user) {
+        return {message: 'You must Logged In', data: null, status: false}
+    }
+
+    const {id} = user;
+
+    try {
+        const result = await getAllProductsByOwner(id)
+
+        return {message: 'Successfully Getting Products with Spesific Owner', data: result, status: true}
+    }catch(err) {
+        return {message : 'Oops Something Went Wrong!', data: null, status: false}
     }
 }

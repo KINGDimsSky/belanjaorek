@@ -1,6 +1,6 @@
-import { createSpesificProductAction, getProductsByCategoryActions } from "@/actions/product.action";
+import { createSpesificProductAction, getProductsByCategoryActions, getProductsByOwnerActions } from "@/actions/product.action";
 import { productCreateSchema } from "@/lib/schema/product-schema";
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -38,3 +38,15 @@ export function useGetProductsByCategory (category : string) {
     })
 }
 
+export function useGetProductsByOwner() {
+    return useQuery({
+        queryKey : ['products'],
+        queryFn : async () => {
+            const result = await getProductsByOwnerActions()
+
+            if (!result.status) throw new Error('Oops Something went wrong!')
+
+            return result.data
+        }
+    })
+}
