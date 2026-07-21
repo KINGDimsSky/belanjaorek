@@ -10,7 +10,7 @@ import WhislistButton from "../sharedComponents/WhislistButton";
 import { toggleWishlistAction } from "@/actions/wishlist.action";
 
 export default function ProductCard({ product } : {product : ProductWithCategory}) {
-  const { name, price, image, IsDiscount, category, createdAt, slug, id} = product;
+  const { name, price, MainImage, IsDiscount, category, createdAt, slug, id} = product;
   const WhislistedItem = UseWhislistStore((state) => state.WhislistProductIds);
   const ToggleWhislist = UseWhislistStore((state) => state.toggleWhislist);
   const IsWhislisted = WhislistedItem.has(product.id);
@@ -35,7 +35,7 @@ export default function ProductCard({ product } : {product : ProductWithCategory
   return (
     <div className="relative pb-10 flex flex-col w-64 hover:border hover:border-foreground">
       <Link href={`/product/${slug}`} className="relative object-fill overflow-hidden h-64">
-        <Image src={image || '/default-image.png'} alt={name} fill className="object-cover"/>
+        <Image src={MainImage || '/default-image.png'} alt={name} fill className="object-cover"/>
       </Link>
       <Link href={`/products?category=${category.slug}`} className="hover:text-primary px-2 mt-3 text-xs tracking-wide text-foreground/90">{category.title}</Link>
       <Link href={`/product/${slug}`} className="text-sm tracking-tight px-2 mt-2 hover:text-foreground/85">{name}</Link>

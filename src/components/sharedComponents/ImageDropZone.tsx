@@ -8,11 +8,12 @@ import Image from "next/image";
 import { Spinner } from "../ui/spinner";
 
 interface ImageDropzoneProps {
-    value : string;
-    onChange : (url: string) => void;
+    value : string[];
+    onChange : (url: string[]) => void;
+    isMainImage ?: boolean
 }
 
-export default function ImageDropZone ({value, onChange} : ImageDropzoneProps) {
+export default function ImageDropZone ({isMainImage = false ,value, onChange} : ImageDropzoneProps) {
     const [isUploading, setIsUploading] = useState(false);
 
     const onDrop = useCallback(async (acceptedFiles : File[]) => {
@@ -30,8 +31,10 @@ export default function ImageDropZone ({value, onChange} : ImageDropzoneProps) {
                     headers: { "Content-Type" : file.type}
                 }); 
 
-                toast('Successfully Uploaded Image!');
-                onChange(publicUrl);
+
+                toast.success('Successfully Uploaded Image!');
+                const newUrl = publicUrl
+                onChange([...value, newUrl]);
             }
         }catch (err) {
             toast.error(`Upload Gagal!, Message : ${err}`)
@@ -44,7 +47,7 @@ export default function ImageDropZone ({value, onChange} : ImageDropzoneProps) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept : {"image/jpeg": [], "image/png" : [], "image/webp": []},
-        maxFiles: 1,
+        maxFiles: 5,
     })
 
     return (

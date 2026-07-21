@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";;
 import { Spinner } from "../ui/spinner";
 import { getWhislistProductsAction, toggleWishlistAction } from "@/actions/wishlist.action";
+import Link from "next/link";
 
 interface WhislistProps {
     state : boolean;
@@ -71,9 +72,9 @@ export default function Whislist ({state , setState} : WhislistProps) {
               <div className="flex flex-col gap-2 mt-2">
                 {products.map((item) => (
                   <div className="flex gap-4" key={item.id}>
-                    <div className="relative w-16 h-16 rounded-md">
-                      <Image src={item.image || '/NoProduct.jpg'} alt={item.name} fill className="object-cover"/>
-                    </div>
+                    <Link href={`/product/${item.slug}`} className="relative w-16 h-16 rounded-md">
+                      <Image src={item.MainImage || '/NoProduct.jpg'} alt={item.name} fill className="object-cover"/>
+                    </Link>
                     <div className="flex flex-col justify-between">
                   <p className="text-xs truncate">{item.name}</p>
                   <p className="text-sm font-semibold text-primary">{ToLocalePriceFormat(item.price)}</p>

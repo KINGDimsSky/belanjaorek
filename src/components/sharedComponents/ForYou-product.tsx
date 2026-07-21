@@ -5,6 +5,8 @@ import ProductCard from "../products/product-card";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getProductsByCategoryActions } from "@/actions/product.action";
+import { useGetProductsByCategory } from "@/hooks/products/useProduct";
+import { Skeleton } from "../ui/skeleton";
 
 const Data = [
   { name: "New Arrivals", slug: "All" },
@@ -16,19 +18,7 @@ const Data = [
 
 export default function ForYouProduct() {
   const [CategoryFilter, SetCategoryFilter] = useState<string>("All");
-  const [Product, SetProduct] = useState<any[]>([]);
- 
-  useEffect(() => {
-    const fetchFilteredProducts = async () => {
-      try {
-        const data = await getProductsByCategoryActions(CategoryFilter);
-        SetProduct(data.data);
-      } catch (error) {
-        console.error("Gagal mengambil produk:", error);
-      }
-    };
-    fetchFilteredProducts();
-  }, [CategoryFilter]);
+  const {data : Product, isLoading } = useGetProductsByCategory(CategoryFilter);
 
   const HandleClicker = (category: string) => {
     SetCategoryFilter(category);
@@ -54,11 +44,13 @@ export default function ForYouProduct() {
       </div>
       <div className="mt-12">
         <div>
-          {Product.length === 0 ? (
+          {isLoading ? (
+            <Skeleton className="w-64 h-80 rounded-none"/>
+          ) : Product?.length === 0 ? (
             <h2 className="text-center text-lg font-light tracking-tight mt-12">No Products Found!</h2>
           ) : (
             <div>
-              {Product.map((product, idx) => (
+              {Product?.map((product, idx) => (
                 <ProductCard key={idx} product={product}/>
               ))}
             </div>

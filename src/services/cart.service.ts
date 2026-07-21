@@ -65,7 +65,7 @@ export async function getCartByIds (userId : string) {
                             id : true,
                             name : true,
                             price : true,
-                            image : true,
+                            MainImage : true,
                             slug : true
                         }
                     }

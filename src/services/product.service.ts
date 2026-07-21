@@ -114,11 +114,19 @@ export async function createSpesificProduct (product : createProductDTO) {
           description: product.description
         }
       },
+      ProductImage : product.productImage ? {
+        createMany : {
+          data : product.productImage.map(url => ({
+            url : url,
+            name : "Product Image"
+          }))
+        }
+      } : undefined,
       price : product.price,
       Stock : product.stock,
       categoryId: product.categoryId,
       userId: product.userId,
-      image : product.image,
+      MainImage : product.mainImage,
       IsDiscount: product.isDiscount,
       DiscountPrice: product.discountPrice,      
     }

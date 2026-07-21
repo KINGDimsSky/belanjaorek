@@ -9,10 +9,12 @@ export const productCreateSchema = z.object ({
     slug : z.string({error: 'slug Must be String!'}).min(5, {error: 'Slug at least have 5 Character'}).max(30, {error: 'Max Slug is 30 Character!'}),
     description : z.string({error: "Description Must Be String!"}).min(10, {error: 'Deskripsi Terlalu Pendek'}),
     price : z.coerce.number<number>({error: 'Price must be Number',}),
-    image : z.string({error: 'Must be a Image URL'}),
+    mainImage : z.string({error: 'Must be a Image URL'}).optional().transform((val) => (val === "" ? undefined : val)),
+    productImage : z.string({error: 'Must be a Image URL'}).optional(),
+    latestVersion : z.string({error : "Must be a String!"}).min(1, {error: 'Version at least have 1 Character!'}).optional().transform((val) => (val === "" ? undefined : val)),
     isDiscount : z.coerce.boolean<boolean>({error: 'Must boolean (True or False)'}),
     stock : z.coerce.number<number>({error: 'Stock must a Number!'}),
     discountPrice : z.coerce.number<number>({error : 'Discount Price must a Number!'}).optional(),
-    categoryId : z.string({error: 'Category Must Selected!'})
+    categoryId : z.string({error: 'Category Must Selected!'}).min(3, {error: 'Category Must at least Have 3 Character'}).transform((val) => (val === "" ? undefined : val))
 })
 

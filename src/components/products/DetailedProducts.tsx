@@ -25,7 +25,7 @@ export default function DetailedProductComponent({product} : {product : NonNulla
         <div className="flex flex-col">
           <div className="relative w-[35rem] h-[25rem]">
             <Image className="object-cover" 
-            src={product?.image || '/NoProduct.jpg'}
+            src={product?.MainImage || '/NoProduct.jpg'}
             alt={product.name} fill/>
           </div>
           <AboutProductComponent products={product}/>

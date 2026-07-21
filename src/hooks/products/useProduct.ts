@@ -1,6 +1,6 @@
-import { createSpesificProductAction } from "@/actions/product.action";
+import { createSpesificProductAction, getProductsByCategoryActions } from "@/actions/product.action";
 import { productCreateSchema } from "@/lib/schema/product-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -21,6 +21,19 @@ export function useCreateProductMutation () {
         },
         onError: (error : Error) => {
             toast.error(error.message || 'Failed To create A Product!')
+        }
+    })
+}
+
+export function useGetProductsByCategory (category : string) {
+    return useQuery({
+        queryKey : ['products', category],
+        queryFn: async () => {
+            const result = await getProductsByCategoryActions(category);
+
+            if (!result.status) throw new Error ('Oops Something went Wrong!');
+
+            return result.data;
         }
     })
 }

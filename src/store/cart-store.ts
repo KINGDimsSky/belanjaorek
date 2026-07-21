@@ -32,7 +32,7 @@ export const UsecartStore = create(persist<CartState>((set) => ({
                 productId : product.id,
                 name : product.name,
                 price : product.price,
-                image : product.image || '/NoProduct.jpg',
+                image : product.MainImage || '/NoProduct.jpg',
                 quantity : state.amount,
                 slug : product.slug
             }

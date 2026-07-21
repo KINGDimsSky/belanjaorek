@@ -7,41 +7,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  user
+  admin
+}
+
 model User {
-  id                  String     @id @default(cuid())
-  email               String     @unique
-  username            String     @unique
+  id                  String              @id @default(cuid())
+  email               String              @unique
+  username            String              @unique
   password            String?
-  role                String     @default("user")
-  image               String?    @default("/user.png")
-  TwoVerificationStep Boolean    @default(false) @map("2fa")
+  role                Role                @default(user)
+  image               String?             @default("/user.png")
+  TwoVerificationStep Boolean             @default(false) @map("2fa")
   Cart                Cart?
   Product             Product[]
   Wishlist            Wishlist[]
+  productCommentaries ProductCommentary[]
+  userGivingStars     UserGivingStars[]
 
   @@index([email])
   @@map("users")
 }
 
 model Product {
-  id                 String               @id @default(cuid())
-  name               String
-  slug               String               @unique
-  price              Int
-  image              String?              @default("/NoProduct.jpg")
-  IsDiscount         Boolean              @default(false) @map("isdiscount")
-  Stock              Int
-  DiscountPrice      Int?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  userId             String
-  categoryId         String
-  CartItems          CartItems[]
-  category           Category             @relation(fields: [categoryId], references: [id])
-  Seller             User                 @relation(fields: [userId], references: [id])
-  ProductDescription ProductDescription?
-  ProductImage       ProductImage[]
-  Wishlist           Wishlist[]
+  id                  String              @id @default(cuid())
+  name                String
+  slug                String              @unique
+  price               Int
+  MainImage           String?             @default("/NoProduct.jpg")
+  IsDiscount          Boolean             @default(false) @map("isdiscount")
+  Stock               Int
+  DiscountPrice       Int?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  userId              String
+  categoryId          String
+  CartItems           CartItems[]
+  category            Category            @relation(fields: [categoryId], references: [id])
+  Seller              User                @relation(fields: [userId], references: [id])
+  ProductDescription  ProductDescription?
+  ProductImage        ProductImage[]
+  Wishlist            Wishlist[]
+  productVerified     ProductVerified?
+  productCommentaries ProductCommentary[]
+  userGivingStars     UserGivingStars[]
 
   @@index([slug])
   @@map("product")
@@ -58,15 +68,49 @@ model ProductImage {
 }
 
 model ProductDescription {
+  id            String  @id @default(cuid())
+  description   String
+  productId     String  @unique
+  LatestVersion String  @default("v1") @map("latestversion")
+  Product       Product @relation(fields: [productId], references: [id])
+
+  @@map("product_description")
+}
+
+model ProductVerified {
   id                String  @id @default(cuid())
-  description       String
   VerifiedProduct   Boolean @default(false) @map("verifiedproduct")
   productId         String  @unique
-  LatestVersion     String  @default("v1") @map("latestversion")
   LicensesAgreement String  @default("No Licenses") @map("licensesagreement")
   Product           Product @relation(fields: [productId], references: [id])
 
-  @@map("product_description")
+  @@map("verified_product")
+}
+
+model ProductCommentary {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  userId    String
+  productId String
+  user      User      @relation(fields: [userId], references: [id])
+  Product   Product   @relation(fields: [productId], references: [id])
+
+  @@map("comment")
+  @@unique([userId, productId])
+}
+
+model UserGivingStars {
+  id        String @id @default(cuid())
+  stars     Int
+  userId    String
+  productId String
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("product_stars")
+  @@unique([userId, productId])
 }
 
 model Wishlist {

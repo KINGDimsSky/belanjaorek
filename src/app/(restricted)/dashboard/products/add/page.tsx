@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFetchCategory } from "@/hooks/products/useCategory";
 import { useCreateProductMutation } from "@/hooks/products/useProduct";
@@ -26,7 +27,9 @@ export default function AddProductsPage() {
       name: "",
       slug: "",
       description: "",
-      image: "",
+      mainImage: "",
+      latestVersion : "",
+      productImage : "",
       price : 0,
       isDiscount: false,
       discountPrice: 0,
@@ -56,7 +59,7 @@ export default function AddProductsPage() {
                 <FormItem className="">
                   <FormLabel>Products Name</FormLabel>
                   <FormControl>
-                    <Input type="text" {...field} placeholder="Digital Assets"/>
+                    <Input required type="text" {...field} placeholder="Digital Assets"/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
@@ -79,12 +82,12 @@ export default function AddProductsPage() {
 
             <FormField
             control={form.control}
-            name="image"
+            name="mainImage"
             render={({field}) => (
               <FormItem>
-                <FormLabel>Image</FormLabel>
+                <FormLabel>Main Image</FormLabel>
                 <FormControl>
-                  <ImageDropZone value={field.value} onChange={field.onChange}/>
+                  <ImageDropZone isMainImage value={field.value} onChange={field.onChange}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
@@ -157,15 +160,24 @@ export default function AddProductsPage() {
             render={({field}) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <FormControl>
-                  <select {...field} className="">
-                    <option value="">Select Category</option>
-                    {category?.map((cat) => (
-                      <option key={cat.id} value={cat.id}>{cat.title}</option>
-                    ))}
-                  </select>
-                </FormControl>
-                <FormMessage/>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} required {...field}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih Kategori Produk"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Category</SelectLabel>
+                        {category?.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.title}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage/>
               </FormItem>
             )}>
             </FormField>
@@ -179,6 +191,34 @@ export default function AddProductsPage() {
                 <FormLabel>Description Product's</FormLabel>
                 <FormControl>
                   <RichTextEditor value={field.value} onChange={field.onChange}/>
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}>
+            </FormField>
+
+            <FormField
+            control={form.control}
+            name="productImage"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Product Image</FormLabel>
+                <FormControl>
+                  <ImageDropZone value={field.value} onChange={field.onChange}/>
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}>
+            </FormField>
+
+             <FormField
+            control={form.control}
+            name="latestVersion"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Version</FormLabel>
+                <FormControl>
+                  <Input {...field} type="text" />
                 </FormControl>
                 <FormMessage/>
               </FormItem>
