@@ -33,7 +33,10 @@ export async function getSpesificProduct (slug : string) {
           image : true
         }
       },
-      ProductImage: true
+      ProductImage: true,
+      ProductDescription: true,
+      productVerified : true,
+      productCommentaries : true,
     }
   })
 }

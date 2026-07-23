@@ -5,6 +5,7 @@ import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/c
 import { SelectContent } from "@/components/ui/select";  
 import { cn } from "@/lib/utils";
 import { DetailedProductDTO,  } from "@/types";
+import Image from "next/image";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrFormPrevious } from "react-icons/gr";
@@ -13,7 +14,9 @@ import { MdNavigateNext } from "react-icons/md";
 export default function AboutProductComponent({products} : {products : NonNullable<DetailedProductDTO>}) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [clicked, SetClicked] = useState<boolean>(false);
-  const items = [1, 2, 3, 4, 5, 6,]; //nanti diganti ya items jadi image sesuai products nya
+  const items = products.ProductImage //nanti diganti ya items jadi image sesuai products nya
+
+  console.log (items)
 
   const nextSlide = () => {
     if (currentIndex < items.length - 1) {
@@ -29,12 +32,17 @@ export default function AboutProductComponent({products} : {products : NonNullab
 
   return (
     <div className="flex flex-col mt-4 mb-16">
-      <p className=" text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/15</p>     
+      <p className=" text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/{items.length}</p>     
       <div className="relative overflow-hidden">
+        {items.length === 0 && (
+          <div className="">
+            No Images
+          </div>
+        )} 
         <div className="flex gap-4 transition-transform duration-500 ease-in-out" style={{transform: `translateX(-${currentIndex * 25}%)`,}}>
-          {items.map((item, idx) => ( /* Inii masih beelum sempurna nantii diigantiii items beneran dan carousel nya diganti gambar sesuai produknya */
-            <div onClick={() => SetClicked(!clicked)} className="relative w-20 h-20 bg-yellow-200" key={idx}>
-              <h2>Image</h2>
+          {items.map((item, idx) => (
+            <div onClick={() => SetClicked(!clicked)} className="relative w-20 h-20 bg-slate-400" key={idx}>
+              <Image src={item.url} key={item.id} alt={item.name} width={200} height={200}/>
             </div>
           ))}
         </div>
@@ -55,8 +63,8 @@ export default function AboutProductComponent({products} : {products : NonNullab
       </div>
       <div className="border-t border-foreground/15 mt-4 w-full"></div>
       <div className="mt-3 text-sm">
-        <h2 className="w-96 tracking-tight">SummerHouse Hustler Is A Family and Gang Modpack Where is Grove Street Homies Are in
-          Support To Grand Theft Auto San Andreas, Native Offline or SAMP
+        <h2 className="w-96 tracking-tight">
+          {products.ProductDescription?.description} {/* nanti diganti Untuk parsing HTML */}
         </h2>
       </div>
       <h2 className="font-bold mb-4 mt-8 text-2xl">Reviews</h2>

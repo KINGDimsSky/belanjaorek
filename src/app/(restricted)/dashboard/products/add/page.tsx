@@ -12,13 +12,11 @@ import { useFetchCategory } from "@/hooks/products/useCategory";
 import { useCreateProductMutation } from "@/hooks/products/useProduct";
 import { productCreateSchema } from "@/lib/schema/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 
 export default function AddProductsPage() {
-  const [message, setMessage] = useState<string>("");
   const usePOSTProduct = useCreateProductMutation();
   const {data: category, isLoading : isLoadingCategory, } = useFetchCategory();
 

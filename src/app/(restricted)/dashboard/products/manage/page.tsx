@@ -44,18 +44,10 @@ export default function ManageProductsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {Data.map((data) => (
-            <div
-              key={data.id}
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-shadow gap-4"
-            >
+            <div key={data.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-shadow gap-4">
               <div className="flex items-center gap-4">
                 <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-muted flex-shrink-0">
-                  <Image
-                    src={data.MainImage || "/NoProduct.jpg"}
-                    alt={data.name}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={data.MainImage || "/NoProduct.jpg"} alt={data.name} fill className="object-cover"/>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -74,21 +66,11 @@ export default function ManageProductsPage() {
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0">
-                <Button
-                  onClick={() => setSelectedProduct(data)}
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-1.5 text-xs"
-                >
+                <Button onClick={() => setSelectedProduct(data)} variant="outline" size="sm" className="flex items-center gap-1.5 text-xs">
                   <Pencil className="h-3.5 w-3.5" />
                   Edit
                 </Button>
-                <Button
-                  onClick={() => HandleDelete(data.id)}
-                  variant="destructive"
-                  size="sm"
-                  className="flex items-center gap-1.5 text-xs"
-                >
+                <Button onClick={() => HandleDelete(data.id)} variant="destructive" size="sm" className="flex items-center gap-1.5 text-xs">
                   <Trash2 className="h-3.5 w-3.5" />
                   Delete
                 </Button>

@@ -9,6 +9,7 @@ export const productCreateSchema = z.object ({
     description : z.string({error: "Description Must Be String!"}).min(10, {error: 'Deskripsi Terlalu Pendek'}),
     price : z.coerce.number<number>({error: 'Price must be Number',}).min(1, {error : 'Harga Tidak Boleh Kosong atau 0!'}),
     mainImage : z.string().optional().or(z.literal("")),
+    // soon tambahkan status besok
     productImage : z.array(z.string()).optional(),
     latestVersion : z.string().optional().or(z.literal("")), 
     isDiscount : z.coerce.boolean<boolean>({error: 'Must boolean (True or False)'}),

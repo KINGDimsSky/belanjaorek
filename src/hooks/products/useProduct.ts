@@ -1,4 +1,4 @@
-import { createSpesificProductAction, DeleteProductSpesificByOwnerActions, getProductsByCategoryActions, getProductsByOwnerActions } from "@/actions/product.action";
+import { createSpesificProductAction, DeleteProductSpesificByOwnerActions, editSpesificProductActions, getProductsByCategoryActions, getProductsByOwnerActions } from "@/actions/product.action";
 import { productCreateSchema, productEditSchema } from "@/lib/schema/product-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -30,7 +30,20 @@ export function useEditProductMutation () {
 
     return useMutation({
         mutationFn : async (payload: z.infer<typeof productEditSchema>) => {
-            
+            const result = await editSpesificProductActions(payload);
+
+            if (result?.status === false) throw new Error ('Oops something went wrong');
+
+            return result.data
+        },
+        onSuccess : () => {
+            toast.success('Successfully Edited Product');
+
+            queryClient.invalidateQueries({queryKey : ['products']})
+            queryClient.invalidateQueries({queryKey : ['owner-products']})
+        },
+        onError : () => {
+            toast.error('Error Editing Products!');
         }
     })
 }
@@ -73,7 +86,8 @@ export function useDeleteProductsSpesificByOwner () {
             return result.data;
         },
         onSuccess : () => {
-            queryClient.invalidateQueries({queryKey : ['owner-products, products']})
+            queryClient.invalidateQueries({queryKey : ['owner-products']})
+            queryClient.invalidateQueries({queryKey : ['products']})
             toast.success('Successfully Delete Products');
         },
         onError : () => {

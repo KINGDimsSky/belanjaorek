@@ -3,7 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ToLocalePriceFormat } from "@/lib/utils";
+import { cn, ToLocalePriceFormat } from "@/lib/utils";
 import { UsecartStore } from "@/store/cart-store";
 import { DetailedProductDTO, } from "@/types";
 import { useSession } from "next-auth/react";
@@ -166,7 +166,7 @@ export default function DescProduct({products} : {products : NonNullable<Detaile
       <div className="flex flex-col gap-2 mt-8">
         <div className="flex justify-between text-xs">
           <p>Licenses Agreement</p>
-          <p className="text-blue-500">Standard Belanjaorek Assets EULA</p>
+          <p className={cn(products.productVerified?.VerifiedProduct ? "text-blue-500" : "text-red-500")}>{products.productVerified?.LicensesAgreement || 'No Licenses'}</p>
         </div>
         <div className="flex justify-between text-xs">
           <p>File Size</p>
@@ -174,11 +174,11 @@ export default function DescProduct({products} : {products : NonNullable<Detaile
         </div>
         <div className="flex justify-between text-xs">
           <p>Latest Version</p>
-          <p>2.1.2</p>
+          <p>{products.ProductDescription?.LatestVersion}</p>
         </div>
         <div className="flex justify-between text-xs">
           <p>Release Date</p>
-          <p>27 August, 2025</p>
+          <p>nanti diisi date</p>
         </div>
       </div>
     </div>

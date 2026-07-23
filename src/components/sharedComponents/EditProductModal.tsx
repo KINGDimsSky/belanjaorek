@@ -16,6 +16,7 @@ import RichTextEditor from "./RichTextEditor";
 import { useFetchCategory } from "@/hooks/products/useCategory";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { useEditProductMutation } from "@/hooks/products/useProduct";
 
 interface EditProductModalProps {
   product: ProductsByOwner;
@@ -24,6 +25,8 @@ interface EditProductModalProps {
 
 export default function EditProductModal({ product, setState }: EditProductModalProps) {
   const { data: category, isLoading: isLoadingCategory } = useFetchCategory();
+  const editProduct = useEditProductMutation();
+
   const form = useForm<z.infer<typeof productEditSchema>>({
     resolver: zodResolver(productEditSchema),
     defaultValues: {
@@ -42,8 +45,11 @@ export default function EditProductModal({ product, setState }: EditProductModal
     },
   });
 
-  const OnSubmit = () => {
+  const OnSubmit = async (payload : z.infer<typeof productEditSchema>) => {
+   await editProduct.mutateAsync(payload);
 
+   form.reset();
+   setState()
   };
 
   return (
