@@ -210,7 +210,7 @@ export default function AddProductsPage() {
             )}>
             </FormField>
 
-            <Button type="submit" className="">
+            <Button variant={'default'} type="submit" className="">
               Create A Product
             </Button>
           </form>

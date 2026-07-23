@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
-import { createProductDTO } from "@/types/DTO/product-dto";
+import { createProductDTO, editProductDTO } from "@/types/DTO/product-dto";
+import { url } from "inspector";
 
 export async function getProductsByIds (productIds: string[]) {
   if (productIds.length === 0) return [];
@@ -42,6 +43,7 @@ export async function getFilteredProducts (
   discount ?: string, filter ?: string) {
   return await prisma.product.findMany ({
     where : {
+      status : "PUBLISHED",
       ...(category && category !== 'All' && {
         category : {
           slug : category
@@ -78,6 +80,7 @@ export async function getAllCategory () {
 export async function getProductsByCategory (category ?: string) {
   return await prisma.product.findMany({    
       where : {
+        status : "PUBLISHED",
         ...(category && category !== 'All' && {
           category : {
             slug : category
@@ -101,7 +104,10 @@ export async function getProductsByCategory (category ?: string) {
 export async function getAllProductsByOwner (userId: string) {
   return await prisma.product.findMany({
       where : {
-        userId : userId
+        userId : userId,
+        status : {
+          not : "ARCHIVED"
+        }
       },
       include : {
         category : true,
@@ -127,6 +133,21 @@ export async function getAllProductsByOwner (userId: string) {
       }
   })
 }
+
+export async function getArchivedProductsByOwner (userId : string) {
+  return await prisma.product.findMany({
+    where : {
+      userId : userId,
+      status : "ARCHIVED",
+    },
+    include : {
+      category : true,
+      ProductDescription : true,
+      ProductImage : true,
+      productVerified : true
+    }
+  })
+} 
 
 export async function createSpesificProduct (product : createProductDTO) {
   return await prisma.product.create({
@@ -158,6 +179,66 @@ export async function createSpesificProduct (product : createProductDTO) {
       }),
       IsDiscount: product.isDiscount,
       DiscountPrice: product.discountPrice,      
+    }
+  })
+}
+
+export async function editSpesificProduct (payload : editProductDTO) {
+  return prisma.product.update({
+    where : {
+      id : payload.id
+    },
+    data : {
+      name : payload.name,
+      slug : payload.slug,
+      price : payload.price,
+      Stock : payload.stock,
+      IsDiscount : payload.isDiscount,
+      DiscountPrice : payload.discountPrice,
+      status : payload.status,
+      categoryId : payload.categoryId,
+      ProductDescription : {
+        upsert : {
+          create : {
+            description : payload.description,
+            ...(payload.latestVersion && {
+              LatestVersion : payload.latestVersion
+            })
+          },
+          update : {
+            description : payload.description,
+            ...(payload.latestVersion && {
+              LatestVersion : payload.latestVersion
+            })
+          }
+        }
+      },
+      ...(payload.mainImage && {
+        MainImage : payload.mainImage
+      }),
+      ProductImage : {
+        deleteMany : {},
+        ...(payload.productImage && payload.productImage.length > 0 && {
+          createMany : {
+            data : payload.productImage.map((url) => ({
+              url : url,
+              name : "Product Image"
+            }))
+          }
+        })
+      }
+
+    }
+  })
+}
+
+export async function deleteProductsSpesificByOwner (productId : string) {
+  return prisma.product.update({
+    where : {
+      id : productId
+    },
+    data : {
+      status : 'ARCHIVED'
     }
   })
 }

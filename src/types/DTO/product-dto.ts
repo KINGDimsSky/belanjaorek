@@ -12,3 +12,20 @@ export type createProductDTO = {
     userId : string,
     categoryId: string,
 }
+
+export type editProductDTO = {
+    id : string,
+    name : string,
+    slug : string,
+    description : string,
+    mainImage ?: string | '/NoProduct.jpg',
+    productImage ?: string[] | undefined,
+    latestVersion ?: string,
+    price : number,
+    status: "PUBLISHED" | "ARCHIVED" | "DRAFT",
+    isDiscount : boolean,
+    discountPrice ?: number | 0,
+    stock : number,
+    userId : string,
+    categoryId: string,
+}

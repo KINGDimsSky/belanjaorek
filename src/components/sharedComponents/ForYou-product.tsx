@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import ProductCard from "../products/product-card";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { getProductsByCategoryActions } from "@/actions/product.action";
 import { useGetProductsByCategory } from "@/hooks/products/useProduct";
 import { Skeleton } from "../ui/skeleton";
 
@@ -49,7 +48,7 @@ export default function ForYouProduct() {
           ) : Product?.length === 0 ? (
             <h2 className="text-center text-lg font-light tracking-tight mt-12">No Products Found!</h2>
           ) : (
-            <div>
+            <div className="flex flex-wrap gap-6">
               {Product?.map((product, idx) => (
                 <ProductCard key={idx} product={product}/>
               ))}

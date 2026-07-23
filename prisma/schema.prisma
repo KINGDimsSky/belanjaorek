@@ -12,6 +12,12 @@ enum Role {
   admin
 }
 
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model User {
   id                  String              @id @default(cuid())
   email               String              @unique
@@ -38,6 +44,7 @@ model Product {
   MainImage           String?             @default("/NoProduct.jpg")
   IsDiscount          Boolean             @default(false) @map("isdiscount")
   Stock               Int
+  status              Status              @default(DRAFT)
   DiscountPrice       Int?
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
@@ -53,6 +60,7 @@ model Product {
   productCommentaries ProductCommentary[]
   userGivingStars     UserGivingStars[]
 
+  @@index([status])
   @@index([slug])
   @@map("product")
 }
@@ -96,8 +104,8 @@ model ProductCommentary {
   user      User      @relation(fields: [userId], references: [id])
   Product   Product   @relation(fields: [productId], references: [id])
 
-  @@map("comment")
   @@unique([userId, productId])
+  @@map("comment")
 }
 
 model UserGivingStars {
@@ -109,8 +117,8 @@ model UserGivingStars {
   user    User    @relation(fields: [userId], references: [id])
   product Product @relation(fields: [productId], references: [id])
 
-  @@map("product_stars")
   @@unique([userId, productId])
+  @@map("product_stars")
 }
 
 model Wishlist {

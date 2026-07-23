@@ -1,10 +1,10 @@
 "use server"
 
-import { categoryQuerySchema, productCreateSchema } from "@/lib/schema/product-schema"
+import { categoryQuerySchema, productCreateSchema, productEditSchema } from "@/lib/schema/product-schema"
 import { RemoveSpaceAndReplaceWithHypen } from "@/lib/utils";
-import { createSpesificProduct, getAllCategory, getAllProductsByOwner, getProductsByCategory } from "@/services/product.service"
+import { createSpesificProduct, deleteProductsSpesificByOwner, editSpesificProduct, getAllCategory, getAllProductsByOwner, getProductsByCategory } from "@/services/product.service"
 import { getAuthSession } from "@/services/user.service";
-import z from "zod";
+import z, { safeParse } from "zod";
 
 export async function getProductsByCategoryActions (category : string) {
     const validateQuery = categoryQuerySchema.safeParse(category);
@@ -67,6 +67,33 @@ export async function createSpesificProductAction (productPayload :z.infer<typeo
     }
 }
 
+export async function editSpesificProductActions (product : z.infer<typeof productEditSchema>) {
+    const Validate = productEditSchema.safeParse(product);
+    const user = await getAuthSession();
+
+    if (!user) return {message : "You must Logged In!", data: null, status: false}
+
+    if (!Validate.success) return {message: "Wrong Field", data : null, status : false}
+
+    const slug = RemoveSpaceAndReplaceWithHypen(Validate.data.name);
+    const {id} = user
+
+    const payload = {
+        ...Validate.data,
+        slug : slug,
+        userId : id
+    }
+
+    try {
+        const result =  await editSpesificProduct(payload);
+
+
+        return {message : "Successfully Edited Product", data : result, status: true}
+    }catch(Error) {
+        return {message: 'Oops Something went Wrong!', data: null, status: false}
+    }
+}
+
 export async function getAllCategoryActions () {
     try {
         const result = await getAllCategory()
@@ -92,5 +119,21 @@ export async function getProductsByOwnerActions () {
         return {message: 'Successfully Getting Products with Spesific Owner', data: result, status: true}
     }catch(err) {
         return {message : 'Oops Something Went Wrong!', data: null, status: false}
+    }
+}
+
+export async function DeleteProductSpesificByOwnerActions (productId : string) {
+    const user = await getAuthSession();
+
+    if (!user) {
+        return {message: "You must Logged In!", data : null, status: false}
+    }
+
+    try{
+        const result = await deleteProductsSpesificByOwner(productId);
+
+        return {message : "Successfully Delete Spesific Products", data: result, status: true}
+    }catch(err) {
+        return {message : 'Oops Something went Wrong!', data: null, status : false}
     }
 }

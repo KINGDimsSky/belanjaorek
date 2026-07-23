@@ -30,5 +30,5 @@ export const UseGlobalNavigationState = create<GlobalNavigationInterface>((set) 
     ToggleWhislistState : () => set((state) => {
         const CurrentWhislistState = state.whislistState;
         return {whislistState : !CurrentWhislistState}
-    })
+    }),
 })) 

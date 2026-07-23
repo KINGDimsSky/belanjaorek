@@ -18,11 +18,13 @@ export const productCreateSchema = z.object ({
 })
 
 export const productEditSchema = z.object({
-    name : z.string({error: 'Name Must be String!'}).min(5, {error: 'Name At least have 5 Character'}).max(30, {error: 'Max Name is 30 Character!'}),
+    id: z.string({error: "Id Must be a string"}).min(5, {error: "Id At least have 5 Character"}).max(50, {error: "Max Id Is 50 Character!"}),
+    name : z.string({error: 'Name Must be String!'}).min(5, {error: 'Name At least have 5 Character'}).max(40, {error: 'Max Name is 30 Character!'}),
     description : z.string({error: "Description Must Be String!"}).min(10, {error: 'Deskripsi Terlalu Pendek'}),
     price : z.coerce.number<number>({error: 'Price must be Number',}).min(1, {error : 'Harga Tidak Boleh Kosong atau 0!'}),
     mainImage : z.string().optional().or(z.literal("")),
     productImage : z.array(z.string()).optional(),
+    status : z.enum(['PUBLISHED', 'ARCHIVED', 'DRAFT']),
     latestVersion : z.string().optional().or(z.literal("")), 
     isDiscount : z.coerce.boolean<boolean>({error: 'Must boolean (True or False)'}),
     stock : z.coerce.number<number>({error: 'Stock must a Number!'}),
