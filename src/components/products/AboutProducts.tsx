@@ -10,11 +10,12 @@ import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdNavigateNext } from "react-icons/md";
+import SafeHTML from "../sharedComponents/safeHTML";
 
 export default function AboutProductComponent({products} : {products : NonNullable<DetailedProductDTO>}) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [clicked, SetClicked] = useState<boolean>(false);
-  const items = products.ProductImage //nanti diganti ya items jadi image sesuai products nya
+  const items = products.ProductImage 
 
   console.log (items)
 
@@ -32,7 +33,7 @@ export default function AboutProductComponent({products} : {products : NonNullab
 
   return (
     <div className="flex flex-col mt-4 mb-16">
-      <p className=" text-center text-xs mb-4 rounded-md py-2 bg-gray-400/15">1/{items.length}</p>     
+      <p className=" text-center text-xs mb-4 rounded-md py-2">1/{items.length}</p>     
       <div className="relative overflow-hidden">
         {items.length === 0 && (
           <div className="">
@@ -63,9 +64,7 @@ export default function AboutProductComponent({products} : {products : NonNullab
       </div>
       <div className="border-t border-foreground/15 mt-4 w-full"></div>
       <div className="mt-3 text-sm">
-        <h2 className="w-96 tracking-tight">
-          {products.ProductDescription?.description} {/* nanti diganti Untuk parsing HTML */}
-        </h2>
+        <SafeHTML content={products.ProductDescription?.description || 'No Description!'} className=""/>
       </div>
       <h2 className="font-bold mb-4 mt-8 text-2xl">Reviews</h2>
       <div className="flex flex-col">
