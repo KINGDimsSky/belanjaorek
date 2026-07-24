@@ -119,7 +119,7 @@ export default function AboutProductComponent({products} : {products : NonNullab
         ) : (
           <ClientRating stars={ratings} reviews={reviews}/>
         )}
-        <AddCommentary/>
+        <AddCommentary productsId={products.id}/>
       </div>
     </div>
   );
