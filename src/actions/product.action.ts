@@ -2,7 +2,7 @@
 
 import { categoryQuerySchema, productCreateSchema, productEditSchema } from "@/lib/schema/product-schema"
 import { RemoveSpaceAndReplaceWithHypen } from "@/lib/utils";
-import { createSpesificProduct, deleteProductsSpesificByOwner, editSpesificProduct, getAllCategory, getAllProductsByOwner, getProductsByCategory } from "@/services/product.service"
+import { createSpesificProduct, deleteProductsSpesificByOwner, editSpesificProduct, getAllCategory, getAllProductsByOwner, getProductsByCategory, getSpesificProductRating, getSpesificProductReviews } from "@/services/product.service"
 import { getAuthSession } from "@/services/user.service";
 import z, { safeParse } from "zod";
 
@@ -135,5 +135,25 @@ export async function DeleteProductSpesificByOwnerActions (productId : string) {
         return {message : "Successfully Delete Spesific Products", data: result, status: true}
     }catch(err) {
         return {message : 'Oops Something went Wrong!', data: null, status : false}
+    }
+}
+
+export async function getSpesificProductReviewsAction (productId : string) {
+    try {
+        const result = await getSpesificProductReviews(productId);
+
+        return {message : "Successfully Getting All Product Reviews", data: result, status: true}
+    }catch(err) {
+        return {message : 'Oops Something went wrong!', data : [], status: false}
+    }
+}
+
+export async function getSpesificProductRatingAction (productId : string) {
+    try {
+        const result = await getSpesificProductRating(productId);
+
+        return {message : 'Successfully getting All Product Ratings', data : result, status : true}
+    }catch(err) {
+        return {message : err, data : [], status : false}
     }
 }

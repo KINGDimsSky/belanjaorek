@@ -1,4 +1,4 @@
-import { getAllProductsByOwner, getFilteredProducts, getSpesificProduct } from "@/services/product.service";
+import { getAllProductsByOwner, getFilteredProducts, getSpesificProduct, getSpesificProductRating, getSpesificProductReviews } from "@/services/product.service";
 import type { Prisma } from "@prisma/client";
 
 export type CartPayload = {
@@ -23,4 +23,7 @@ export type UICartItems = {
 export type DetailedProductDTO = Prisma.PromiseReturnType<typeof getSpesificProduct>
 export type ProductsByOwner = Prisma.PromiseReturnType<typeof getAllProductsByOwner>[number]
 export type ProductWithCategory = Prisma.PromiseReturnType<typeof getFilteredProducts>[number]
+
+export type ProductReviews = Prisma.PromiseReturnType<typeof getSpesificProductReviews>
+export type ProductRatings = Prisma.PromiseReturnType<typeof getSpesificProductRating>
 

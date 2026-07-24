@@ -1,4 +1,4 @@
-import { createSpesificProductAction, DeleteProductSpesificByOwnerActions, editSpesificProductActions, getProductsByCategoryActions, getProductsByOwnerActions } from "@/actions/product.action";
+import { createSpesificProductAction, DeleteProductSpesificByOwnerActions, editSpesificProductActions, getProductsByCategoryActions, getProductsByOwnerActions, getSpesificProductRatingAction, getSpesificProductReviewsAction } from "@/actions/product.action";
 import { productCreateSchema, productEditSchema } from "@/lib/schema/product-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -92,6 +92,32 @@ export function useDeleteProductsSpesificByOwner () {
         },
         onError : () => {
             toast.error('Error deleting Spesific Product!');
+        }
+    })
+}
+
+export function useGetSpesificProductReviews (productId : string) {
+    return useQuery({
+        queryKey : ['product-review', productId],
+        queryFn : async () => {
+            const result = await getSpesificProductReviewsAction(productId);
+
+            if (!result.status) throw new Error('Oops Something went wrong!');
+
+            return result.data
+        }
+    })
+}
+
+export function useGetSpesificProductRating (productId : string) {
+    return useQuery({
+        queryKey : ['product-rating', productId],
+        queryFn : async () => {
+            const result  = await getSpesificProductRatingAction(productId);
+
+            if (!result.status) throw new Error ('Oops Something went wrong');
+
+            return result.data
         }
     })
 }

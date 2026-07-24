@@ -96,13 +96,15 @@ model ProductVerified {
 }
 
 model ProductCommentary {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  userId    String
-  productId String
-  user      User      @relation(fields: [userId], references: [id])
-  Product   Product   @relation(fields: [productId], references: [id])
+  id         String    @id @default(cuid())
+  subject    String
+  commentary String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  userId     String
+  productId  String
+  user       User      @relation(fields: [userId], references: [id])
+  Product    Product   @relation(fields: [productId], references: [id])
 
   @@unique([userId, productId])
   @@map("comment")

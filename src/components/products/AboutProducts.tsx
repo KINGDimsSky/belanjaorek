@@ -11,14 +11,20 @@ import { FaStar } from "react-icons/fa";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdNavigateNext } from "react-icons/md";
 import SafeHTML from "../sharedComponents/safeHTML";
+import { useGetSpesificProductRating, useGetSpesificProductReviews } from "@/hooks/products/useProduct";
+import { Skeleton } from "../ui/skeleton";
+import AddCommentary from "../sharedComponents/AddCommentary";
 
 export default function AboutProductComponent({products} : {products : NonNullable<DetailedProductDTO>}) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [clicked, SetClicked] = useState<boolean>(false);
-  const items = products.ProductImage 
-
-  console.log (items)
-
+  const {data: reviews, isLoading : loadingReview} = useGetSpesificProductReviews(products.id);
+  const {data : ratings, isLoading : loadingRating} = useGetSpesificProductRating(products.id);
+  const reviewCount = reviews?.length;
+  const ratingCount = ratings?.length;
+  const items = products.ProductImage;
+  
+  
   const nextSlide = () => {
     if (currentIndex < items.length - 1) {
       setCurrentIndex(prev => prev + 1)
@@ -76,7 +82,7 @@ export default function AboutProductComponent({products} : {products : NonNullab
           </div>
           <p className="text-sm font-semibold">With 5 Stars</p>
         </div>
-        <p className="text-xs tracking-tight font-extralight mt-2">This Assets Has 772 User ratings and 292 User Reviews</p>
+        <p className="text-xs tracking-tight font-extralight mt-2">This Assets Has {ratingCount} User ratings and {reviewCount} User Reviews</p>
         <p className="mt-6 mb-2 font-semibold">Sort By</p>
         <div className="flex w-64 gap-4 mb-8">
           <Select>
@@ -106,7 +112,14 @@ export default function AboutProductComponent({products} : {products : NonNullab
             </SelectContent>
           </Select>
         </div>
-        <ClientRating/> {/* Nanti Ini Di kasih Props */}
+        {loadingReview || loadingRating ? (
+          <Skeleton className="w-full h-32"/>
+        ) : !reviews || !ratings || (reviews?.length === 0 && ratings?.length === 0) ? (
+          <h2 className="text-sm tracking-tight">This Products Has No Commentary Or Ratings</h2>
+        ) : (
+          <ClientRating stars={ratings} reviews={reviews}/>
+        )}
+        <AddCommentary/>
       </div>
     </div>
   );

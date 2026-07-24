@@ -245,3 +245,27 @@ export async function deleteProductsSpesificByOwner (productId : string) {
     }
   })
 }
+
+export async function getSpesificProductReviews (productId : string) {
+  return await prisma.productCommentary.findMany({
+    where : {
+      productId : productId
+    },
+    include : {
+      user : {
+        select : {
+          username : true,
+          image : true,
+        }
+      }
+    }
+  })
+}
+
+export async function getSpesificProductRating (productId : string) {
+  return await prisma.userGivingStars.findMany({
+    where : {
+      productId : productId
+    }
+  })
+}
